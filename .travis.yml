@@ -1,0 +1,58 @@
+sudo: false
+language: python
+cache: pip
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TOX_ENV=py27-dj111
+  - python: pypy
+    env: TOX_ENV=pypy-dj111
+  - python: 3.4
+    env: TOX_ENV=py34-dj111
+  - python: 3.5
+    env: TOX_ENV=py35-dj111
+  - python: 3.6
+    env: TOX_ENV=py36-dj111
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111
+  - python: 3.4
+    env: TOX_ENV=py34-dj20
+  - python: 3.5
+    env: TOX_ENV=py35-dj20
+  - python: 3.6
+    env: TOX_ENV=py36-dj20
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj20
+  - python: 3.5
+    env: TOX_ENV=py35-djdev
+  - python: 3.6
+    env: TOX_ENV=py36-djdev
+  - python: 3.6
+    env: TOX_ENV=flake8
+  - python: 3.6
+    env: TOX_ENV=isort
+  - python: 3.6
+    env: TOX_ENV=readme
+  - python: 3.6
+    env: TOX_ENV=check-manifest
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database test_database;' -U postgres
+install:
+- pip install -U pip setuptools tox wheel
+script:
+- tox -e "${TOX_ENV}"
+# deploy:
+#   provider: pypi
+#   distributions: sdist bdist_wheel
+#   user: uncovertruth
+#   password:
+#     secure: PLEASE_REPLACE_ME
+#   on:
+#     tags: true
+#     repo: uncovertruth/django-inverse-lookup
+#     condition: $TOX_ENV = py36-dj20
+notifications:
+  email: false
