@@ -14,11 +14,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    # TODO: Put package requirements here
-]
-
-setup_requirements = [
-    # TODO(uncovertruth): Put setup requirements here
+    'Django>=1.11',
 ]
 
 test_requirements = [
@@ -41,9 +37,13 @@ setup(
     keywords='django, inverse lookup, filter',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
+        'Environment :: Web Environment',
+        'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
+        'Operating System :: OS Independent',
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
@@ -51,7 +51,6 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    test_suite='tests',
+    test_suite='runtests.runtests',
     tests_require=test_requirements,
-    setup_requires=setup_requirements,
 )
