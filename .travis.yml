@@ -44,8 +44,8 @@ services:
   - postgresql
   - mysql
 before_script:
-  - sh -c "if [ '$TOX_TEST_DB_VENDOR' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS test_database;CREATE DATABASE test_database;' -U postgres; fi"
-  - sh -c "if [ '$TOX_TEST_DB_VENDOR' = 'mysql' ]; then mysql -e 'DROP DATABASE IF EXISTS test_database;CREATE DATABASE IF NOT EXISTS test_database;'; fi"
+  - sh -c "if [ '$TOX_TEST_DB_VENDOR' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS test_database;' -U postgres; fi"
+  - sh -c "if [ '$TOX_TEST_DB_VENDOR' = 'mysql' ]; then mysql -e 'DROP DATABASE IF EXISTS test_database;'; fi"
 install:
 - pip install -U pip setuptools tox wheel
 script:
