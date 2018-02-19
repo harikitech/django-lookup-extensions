@@ -4,30 +4,34 @@ cache: pip
 matrix:
   fast_finish: true
   include:
-  - python: 2.7
-    env: TOX_ENV=py27-dj111
-  - python: pypy
-    env: TOX_ENV=pypy-dj111
-  - python: 3.4
-    env: TOX_ENV=py34-dj111
-  - python: 3.5
-    env: TOX_ENV=py35-dj111
+  # - python: 2.7
+  #   env: TOX_ENV=py27-dj111-sqlite
+  # - python: pypy
+  #   env: TOX_ENV=pypy-dj111-sqlite
+  # - python: 3.4
+  #   env: TOX_ENV=py34-dj111-sqlite
+  # - python: 3.5
+  #   env: TOX_ENV=py35-dj111-sqlite
   - python: 3.6
-    env: TOX_ENV=py36-dj111
-  - python: pypy3
-    env: TOX_ENV=pypy3-dj111
-  - python: 3.4
-    env: TOX_ENV=py34-dj20
-  - python: 3.5
-    env: TOX_ENV=py35-dj20
+    env: TOX_ENV=py36-dj111-sqlite
   - python: 3.6
-    env: TOX_ENV=py36-dj20
-  - python: pypy3
-    env: TOX_ENV=pypy3-dj20
-  - python: 3.5
-    env: TOX_ENV=py35-djdev
+    env: TOX_ENV=py36-dj111-mysql
   - python: 3.6
-    env: TOX_ENV=py36-djdev
+    env: TOX_ENV=py36-dj111-postgresql
+  # - python: pypy3
+  #   env: TOX_ENV=pypy3-dj111-sqlite
+  # - python: 3.4
+  #   env: TOX_ENV=py34-dj20-sqlite
+  # - python: 3.5
+  #   env: TOX_ENV=py35-dj20-sqlite
+  # - python: 3.6
+  #   env: TOX_ENV=py36-dj20-sqlite
+  # - python: pypy3
+  #   env: TOX_ENV=pypy3-dj20-sqlite
+  # - python: 3.5
+  #   env: TOX_ENV=py35-djdev-sqlite
+  # - python: 3.6
+  #   env: TOX_ENV=py36-djdev-sqlite
   - python: 3.6
     env: TOX_ENV=flake8
   - python: 3.6
@@ -38,8 +42,10 @@ matrix:
     env: TOX_ENV=check-manifest
 services:
   - postgresql
+  - mysql
 before_script:
-  - psql -c 'create database test_database;' -U postgres
+  - psql -c 'CREATE DATABASE test_database;' -U postgres
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test_database;'
 install:
 - pip install -U pip setuptools tox wheel
 script:
