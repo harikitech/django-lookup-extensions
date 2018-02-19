@@ -37,6 +37,16 @@ elif os.environ.get('TEST_DB_VENDOR', None) == 'postgresql':
             }
         },
     }
+elif os.environ.get('TEST_DB_VENDOR', None) == 'oldsqlite3':
+    DATABASES = {
+        'default': {
+            'NAME': 'default',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'TEST': {
+                'NAME': ':memory:',
+            }
+        },
+    }
 else:
     DATABASES = {
         'default': {
