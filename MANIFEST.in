@@ -8,11 +8,13 @@ include LICENSE
 include README.rst
 include setup.cfg
 include setup.py
+include runtests.py
 include Makefile
 
 exclude .editorconfig
 exclude .pyup.yml
 exclude .travis.yml
+exclude runmakemigrations.py
 exclude requirements.txt
 exclude tox.ini
 
