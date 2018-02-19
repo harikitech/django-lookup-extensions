@@ -4,48 +4,89 @@ cache: pip
 matrix:
   fast_finish: true
   include:
-  # - python: 2.7
-  #   env: TOX_ENV=py27-dj111-sqlite
-  # - python: pypy
-  #   env: TOX_ENV=pypy-dj111-sqlite
-  # - python: 3.4
-  #   env: TOX_ENV=py34-dj111-sqlite
-  # - python: 3.5
-  #   env: TOX_ENV=py35-dj111-sqlite
+  - python: 2.7
+    env: TOX_ENV=py27-dj111-sqlite
+  - python: pypy
+    env: TOX_ENV=pypy-dj111-sqlite
+  - python: 3.4
+    env: TOX_ENV=py34-dj111-sqlite
+  - python: 3.5
+    env: TOX_ENV=py35-dj111-sqlite
   - python: 3.6
     env: TOX_ENV=py36-dj111-sqlite
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111-sqlite
+  - python: 3.4
+    env: TOX_ENV=py34-dj20-sqlite
+  - python: 3.5
+    env: TOX_ENV=py35-dj20-sqlite
+  - python: 3.6
+    env: TOX_ENV=py36-dj20-sqlite
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj20-sqlite
+  - python: 3.5
+    env: TOX_ENV=py35-djdev-sqlite
+  - python: 3.6
+    env: TOX_ENV=py36-djdev-sqlite
+  - python: 2.7
+    env: TOX_ENV=py27-dj111-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: pypy
+    env: TOX_ENV=pypy-dj111-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.4
+    env: TOX_ENV=py34-dj111-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.5
+    env: TOX_ENV=py35-dj111-mysql TOX_TEST_DB_VENDOR=mysql
   - python: 3.6
     env: TOX_ENV=py36-dj111-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.4
+    env: TOX_ENV=py34-dj20-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.5
+    env: TOX_ENV=py35-dj20-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.6
+    env: TOX_ENV=py36-dj20-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj20-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.5
+    env: TOX_ENV=py35-djdev-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 3.6
+    env: TOX_ENV=py36-djdev-mysql TOX_TEST_DB_VENDOR=mysql
+  - python: 2.7
+    env: TOX_ENV=py27-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: pypy
+    env: TOX_ENV=pypy-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.4
+    env: TOX_ENV=py34-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.5
+    env: TOX_ENV=py35-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
   - python: 3.6
     env: TOX_ENV=py36-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
-  # - python: pypy3
-  #   env: TOX_ENV=pypy3-dj111-sqlite
-  # - python: 3.4
-  #   env: TOX_ENV=py34-dj20-sqlite
-  # - python: 3.5
-  #   env: TOX_ENV=py35-dj20-sqlite
-  # - python: 3.6
-  #   env: TOX_ENV=py36-dj20-sqlite
-  # - python: pypy3
-  #   env: TOX_ENV=pypy3-dj20-sqlite
-  # - python: 3.5
-  #   env: TOX_ENV=py35-djdev-sqlite
-  # - python: 3.6
-  #   env: TOX_ENV=py36-djdev-sqlite
-  # - python: 3.6
-  #   env: TOX_ENV=flake8
-  # - python: 3.6
-  #   env: TOX_ENV=isort
-  # - python: 3.6
-  #   env: TOX_ENV=readme
-  # - python: 3.6
-  #   env: TOX_ENV=check-manifest
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.4
+    env: TOX_ENV=py34-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.5
+    env: TOX_ENV=py35-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.6
+    env: TOX_ENV=py36-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.5
+    env: TOX_ENV=py35-djdev-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.6
+    env: TOX_ENV=py36-djdev-postgresql TOX_TEST_DB_VENDOR=postgresql
+  - python: 3.6
+    env: TOX_ENV=flake8
+  - python: 3.6
+    env: TOX_ENV=isort
+  - python: 3.6
+    env: TOX_ENV=readme
+  - python: 3.6
+    env: TOX_ENV=check-manifest
 services:
   - postgresql
   - mysql
-# before_script:
-#   - sh -c "if [ '$TOX_TEST_DB_VENDOR' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS test_database;' -U postgres; fi"
-#   - sh -c "if [ '$TOX_TEST_DB_VENDOR' = 'mysql' ]; then mysql -e 'DROP DATABASE IF EXISTS test_database;'; fi"
 install:
 - pip install -U pip setuptools tox wheel
 script:
