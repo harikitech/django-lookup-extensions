@@ -26,7 +26,7 @@ if os.environ.get('TEST_DB_VENDOR', None) == 'mysql':
         },
     }
 elif os.environ.get('TEST_DB_VENDOR', None) == 'postgresql':
-    if os.environ.get('TOX_TEST_USE_CFFI', None) == 'yes':
+    if os.environ.get('TEST_USE_CFFI', None) == 'yes':
         from psycopg2cffi import compat
         compat.register()
     DATABASES = {
