@@ -55,7 +55,7 @@ matrix:
   # - python: 2.7
   #   env: TOX_ENV=py27-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
   - python: pypy
-    env: TOX_ENV=pypy-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
+    env: TOX_ENV=pypy-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql TOX_TEST_USE_CFFI=yes
   # - python: 3.4
   #   env: TOX_ENV=py34-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
   # - python: 3.5
@@ -63,7 +63,7 @@ matrix:
   # - python: 3.6
   #   env: TOX_ENV=py36-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
   - python: pypy3
-    env: TOX_ENV=pypy3-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
+    env: TOX_ENV=pypy3-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql TOX_TEST_USE_CFFI=yes
   # - python: 3.4
   #   env: TOX_ENV=py34-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
   # - python: 3.5
@@ -71,7 +71,7 @@ matrix:
   # - python: 3.6
   #   env: TOX_ENV=py36-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
   - python: pypy3
-    env: TOX_ENV=pypy3-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql
+    env: TOX_ENV=pypy3-dj20-postgresql TOX_TEST_DB_VENDOR=postgresql TOX_TEST_USE_CFFI=yes
   # - python: 3.5
   #   env: TOX_ENV=py35-djdev-postgresql TOX_TEST_DB_VENDOR=postgresql
   # - python: 3.6
