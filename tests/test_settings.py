@@ -20,7 +20,8 @@ if os.environ.get('TEST_DB_VENDOR', None) == 'mysql':
             'USER': 'root',
             'PASSWORD': '',
             'TEST': {
-                'NAME': 'test_database',
+                # https://github.com/hackoregon/devops-17/issues/46#issuecomment-288775868
+                'NAME': 'test_' + 'NAME' + os.getenv('TRAVIS_BUILD_NUMBER', "")
             }
         },
     }
@@ -31,7 +32,8 @@ elif os.environ.get('TEST_DB_VENDOR', None) == 'postgresql':
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'USER': 'postgres',
             'TEST': {
-                'NAME': 'test_database',
+                # https://github.com/hackoregon/devops-17/issues/46#issuecomment-288775868
+                'NAME': 'test_' + 'NAME' + os.getenv('TRAVIS_BUILD_NUMBER', "")
             }
         },
     }
