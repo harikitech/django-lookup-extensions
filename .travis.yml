@@ -15,9 +15,9 @@ matrix:
   - python: 3.6
     env: TOX_ENV=py36-dj111-sqlite
   - python: 3.6
-    env: TOX_ENV=py36-dj111-mysql
+    env: TOX_ENV=py36-dj111-mysql TOX_TEST_DB_VENDOR=mysql
   - python: 3.6
-    env: TOX_ENV=py36-dj111-postgresql
+    env: TOX_ENV=py36-dj111-postgresql TOX_TEST_DB_VENDOR=postgresql
   # - python: pypy3
   #   env: TOX_ENV=pypy3-dj111-sqlite
   # - python: 3.4
