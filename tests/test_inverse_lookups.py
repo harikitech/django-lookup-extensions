@@ -1,6 +1,6 @@
 import unittest
 
-from django.db import connection
+from django.db import connection, connections
 from django.db.models.lookups import (
     Contains,
     EndsWith,
@@ -28,6 +28,10 @@ from inverse_lookup.lookups import (
 from .models import (
     ModelA,
     ModelB,
+    ModelMySQLA,
+    ModelMySQLB,
+    ModelPostgreSQLA,
+    ModelPostgreSQLB,
 )
 
 
@@ -53,7 +57,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeExact(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            '"tests_modela"."name" <> %s',
+            '"app_default_modela"."name" <> %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
@@ -64,7 +68,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IExact(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual([arg], lookup_sql[1])
@@ -72,7 +76,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIExact(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
@@ -83,7 +87,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = Contains(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], lookup_sql[1])
@@ -91,7 +95,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeContains(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
@@ -101,7 +105,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = Contains(self.field.cached_col, self.other_field.cached_col)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
@@ -109,7 +113,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeContains(self.field.cached_col, self.other_field.cached_col)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -120,7 +124,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IContains(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], lookup_sql[1])
@@ -128,7 +132,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIContains(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
@@ -138,7 +142,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IContains(self.field.cached_col, self.other_field.cached_col)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
@@ -146,7 +150,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIContains(self.field.cached_col, self.other_field.cached_col)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -157,7 +161,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = StartsWith(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual([arg + '%'], lookup_sql[1])
@@ -165,7 +169,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeStartsWith(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
@@ -175,7 +179,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = StartsWith(self.field.cached_col, self.other_field.cached_col)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" LIKE REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
@@ -183,7 +187,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeStartsWith(self.field.cached_col, self.other_field.cached_col)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" NOT LIKE REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%' ESCAPE '\'''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -194,7 +198,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IStartsWith(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual([arg + '%'], lookup_sql[1])
@@ -202,7 +206,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIStartsWith(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
@@ -212,7 +216,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IStartsWith(self.field.cached_col, self.other_field.cached_col)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" LIKE UPPER(REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
@@ -220,7 +224,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIStartsWith(self.field.cached_col, self.other_field.cached_col)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" NOT LIKE UPPER(REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%' ESCAPE '\'''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -231,7 +235,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = EndsWith(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg], lookup_sql[1])
@@ -239,7 +243,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeEndsWith(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
@@ -249,7 +253,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = EndsWith(self.field.cached_col, self.other_field.cached_col)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') ESCAPE '\'''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
@@ -257,7 +261,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeEndsWith(self.field.cached_col, self.other_field.cached_col)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') ESCAPE '\'''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -268,7 +272,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IEndsWith(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg], lookup_sql[1])
@@ -276,7 +280,7 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIEndsWith(self.field.cached_col, arg)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE %s ESCAPE '\'''',
+            r'''"app_default_modela"."name" NOT LIKE %s ESCAPE '\'''',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
@@ -286,7 +290,7 @@ class NeLookupSqliteTest(TestCase):
         lookup = IEndsWith(self.field.cached_col, self.other_field.cached_col)
         lookup_sql = lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) ESCAPE '\'''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
@@ -294,22 +298,22 @@ class NeLookupSqliteTest(TestCase):
         ne_lookup = NeIEndsWith(self.field.cached_col, self.other_field.cached_col)
         ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
         self.assertEqual(
-            r'''"tests_modela"."name" NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) ESCAPE '\'''',  # noqa E501
+            r'''"app_default_modela"."name" NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_default_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) ESCAPE '\'''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
 
 
-@unittest.skipUnless(connection.vendor == 'mysql', 'mysql tests')
+@unittest.skipUnless('db_mysql' in connections and connections['db_mysql'].vendor == 'mysql', 'mysql tests')
 class NeLookupMySqlTest(TestCase):
     def setUp(self):
         super(NeLookupMySqlTest, self).setUp()
         # When running test using MySQL, you may need to change Index size 2048 to 768...
         # analytics/properties/projects/migrations/0003_add_index_to_value.py
-        self.query = Query(ModelA)
-        self.compiler = self.query.get_compiler(connection=connection)
-        self.field = ModelA._meta.get_field('name')
-        self.other_field = ModelB._meta.get_field('name')
+        self.query = Query(ModelMySQLA)
+        self.compiler = self.query.get_compiler(connection=connections['db_mysql'])
+        self.field = ModelMySQLA._meta.get_field('name')
+        self.other_field = ModelMySQLB._meta.get_field('name')
 
     def tearDown(self):
         super(NeLookupMySqlTest, self).tearDown()
@@ -318,17 +322,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = Exact(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` = %s',
+            '`app_mysql_modelmysqla`.`name` = %s',
             lookup_sql[0],
         )
         self.assertEqual([arg], lookup_sql[1])
 
         ne_lookup = NeExact(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` <> %s',
+            '`app_mysql_modelmysqla`.`name` <> %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
@@ -337,17 +341,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = IExact(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE %s',
+            '`app_mysql_modelmysqla`.`name` LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual([arg], lookup_sql[1])
 
         ne_lookup = NeIExact(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
@@ -356,17 +360,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = Contains(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE BINARY %s',
+            '`app_mysql_modelmysqla`.`name` LIKE BINARY %s',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], lookup_sql[1])
 
         ne_lookup = NeContains(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE BINARY %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE BINARY %s',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
@@ -374,17 +378,17 @@ class NeLookupMySqlTest(TestCase):
     def test_necontains_mysql_like_with_other_field(self):
 
         lookup = Contains(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeContains(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` NOT LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` NOT LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -393,17 +397,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = IContains(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE %s',
+            '`app_mysql_modelmysqla`.`name` LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], lookup_sql[1])
 
         ne_lookup = NeIContains(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
@@ -411,17 +415,17 @@ class NeLookupMySqlTest(TestCase):
     def test_neicontains_mysql_like_with_other_field(self):
 
         lookup = IContains(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeIContains(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` NOT LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` NOT LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -430,17 +434,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = StartsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE BINARY %s',
+            '`app_mysql_modelmysqla`.`name` LIKE BINARY %s',
             lookup_sql[0],
         )
         self.assertEqual([arg + '%'], lookup_sql[1])
 
         ne_lookup = NeStartsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE BINARY %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE BINARY %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
@@ -448,17 +452,17 @@ class NeLookupMySqlTest(TestCase):
     def test_nestartswith_mysql_like_with_other_field(self):
 
         lookup = StartsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` LIKE BINARY CONCAT(REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` LIKE BINARY CONCAT(REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeStartsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` NOT LIKE BINARY CONCAT(REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` NOT LIKE BINARY CONCAT(REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -467,17 +471,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = IStartsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE %s',
+            '`app_mysql_modelmysqla`.`name` LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual([arg + '%'], lookup_sql[1])
 
         ne_lookup = NeIStartsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
@@ -485,17 +489,17 @@ class NeLookupMySqlTest(TestCase):
     def test_neistartswith_mysql_like_with_other_field(self):
 
         lookup = IStartsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` LIKE CONCAT(REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` LIKE CONCAT(REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeIStartsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` NOT LIKE CONCAT(REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` NOT LIKE CONCAT(REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'), '%%')''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -504,17 +508,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = EndsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE BINARY %s',
+            '`app_mysql_modelmysqla`.`name` LIKE BINARY %s',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg], lookup_sql[1])
 
         ne_lookup = NeEndsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE BINARY %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE BINARY %s',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
@@ -522,17 +526,17 @@ class NeLookupMySqlTest(TestCase):
     def test_neendswith_mysql_like_with_other_field(self):
 
         lookup = EndsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeEndsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` NOT LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` NOT LIKE BINARY CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -541,17 +545,17 @@ class NeLookupMySqlTest(TestCase):
         arg = 'test string'
 
         lookup = IEndsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` LIKE %s',
+            '`app_mysql_modelmysqla`.`name` LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg], lookup_sql[1])
 
         ne_lookup = NeIEndsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            '`tests_modela`.`name` NOT LIKE %s',
+            '`app_mysql_modelmysqla`.`name` NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
@@ -559,30 +563,30 @@ class NeLookupMySqlTest(TestCase):
     def test_neiendswith_mysql_like_with_other_field(self):
 
         lookup = IEndsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeIEndsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_mysql'])
         self.assertEqual(
-            r'''`tests_modela`.`name` NOT LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`tests_modelb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
+            r'''`app_mysql_modelmysqla`.`name` NOT LIKE CONCAT('%%', REPLACE(REPLACE(REPLACE((`app_mysql_modelmysqlb`.`name`), '\\', '\\\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
 
 
-@unittest.skipUnless(connection.vendor == 'postgresql', 'postgresql tests')
+@unittest.skipUnless('db_postgresql' in connections and connections['db_postgresql'].vendor == 'postgresql', 'postgresql tests')
 class NeLookupPostgreSQLTest(TestCase):
     def setUp(self):
         super(NeLookupPostgreSQLTest, self).setUp()
-        self.query = Query(ModelA)
-        self.compiler = self.query.get_compiler(connection=connection)
-        self.field = ModelA._meta.get_field('name')
-        self.other_field = ModelB._meta.get_field('name')
+        self.query = Query(ModelPostgreSQLA)
+        self.compiler = self.query.get_compiler(connection=connections['db_postgresql'])
+        self.field = ModelPostgreSQLA._meta.get_field('name')
+        self.other_field = ModelPostgreSQLB._meta.get_field('name')
 
         self.sqlite_dialect = VENDOR_DIALECT['sqlite']
         self.mysql_dialect = VENDOR_DIALECT['mysql']
@@ -595,17 +599,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = Exact(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name" = %s',
+            '"app_mysql_modelpostgresqla"."name" = %s',
             lookup_sql[0],
         )
         self.assertEqual([arg], lookup_sql[1])
 
         ne_lookup = NeExact(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name" <> %s',
+            '"app_mysql_modelpostgresqla"."name" <> %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
@@ -614,17 +618,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = IExact(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) = UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) = UPPER(%s)',
             lookup_sql[0],
         )
         self.assertEqual([arg], lookup_sql[1])
 
         ne_lookup = NeIExact(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) <> UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) <> UPPER(%s)',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
@@ -633,17 +637,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = Contains(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name"::text LIKE %s',
+            '"app_mysql_modelpostgresqla"."name"::text LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], lookup_sql[1])
 
         ne_lookup = NeContains(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name"::text NOT LIKE %s',
+            '"app_mysql_modelpostgresqla"."name"::text NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
@@ -651,17 +655,17 @@ class NeLookupPostgreSQLTest(TestCase):
     def test_necontains_postgresql_like_with_other_field(self):
 
         lookup = Contains(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r""""tests_modela"."name"::text LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
+            r""""app_mysql_modelpostgresqla"."name"::text LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeContains(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r""""tests_modela"."name"::text NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
+            r""""app_mysql_modelpostgresqla"."name"::text NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -670,17 +674,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = IContains(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) LIKE UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) LIKE UPPER(%s)',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], lookup_sql[1])
 
         ne_lookup = NeIContains(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) NOT LIKE UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) NOT LIKE UPPER(%s)',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
@@ -688,17 +692,17 @@ class NeLookupPostgreSQLTest(TestCase):
     def test_neicontains_postgresql_like_with_other_field(self):
 
         lookup = IContains(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r"""UPPER("tests_modela"."name"::text) LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
+            r"""UPPER("app_mysql_modelpostgresqla"."name"::text) LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeIContains(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r"""UPPER("tests_modela"."name"::text) NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
+            r"""UPPER("app_mysql_modelpostgresqla"."name"::text) NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -707,17 +711,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = StartsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name"::text LIKE %s',
+            '"app_mysql_modelpostgresqla"."name"::text LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual([arg + '%'], lookup_sql[1])
 
         ne_lookup = NeStartsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name"::text NOT LIKE %s',
+            '"app_mysql_modelpostgresqla"."name"::text NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
@@ -725,17 +729,17 @@ class NeLookupPostgreSQLTest(TestCase):
     def test_nestartswith_postgresql_like_with_other_field(self):
 
         lookup = StartsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r""""tests_modela"."name"::text LIKE REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
+            r""""app_mysql_modelpostgresqla"."name"::text LIKE REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeStartsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r""""tests_modela"."name"::text NOT LIKE REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
+            r""""app_mysql_modelpostgresqla"."name"::text NOT LIKE REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_') || '%%'""",  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -744,17 +748,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = IStartsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) LIKE UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) LIKE UPPER(%s)',
             lookup_sql[0],
         )
         self.assertEqual([arg + '%'], lookup_sql[1])
 
         ne_lookup = NeIStartsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) NOT LIKE UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) NOT LIKE UPPER(%s)',
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
@@ -762,17 +766,17 @@ class NeLookupPostgreSQLTest(TestCase):
     def test_neistartswith_postgresql_like_with_other_field(self):
 
         lookup = IStartsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r"""UPPER("tests_modela"."name"::text) LIKE UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
+            r"""UPPER("app_mysql_modelpostgresqla"."name"::text) LIKE UPPER(REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeIStartsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r"""UPPER("tests_modela"."name"::text) NOT LIKE UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
+            r"""UPPER("app_mysql_modelpostgresqla"."name"::text) NOT LIKE UPPER(REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')) || '%%'""",  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -781,17 +785,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = EndsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name"::text LIKE %s',
+            '"app_mysql_modelpostgresqla"."name"::text LIKE %s',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg], lookup_sql[1])
 
         ne_lookup = NeEndsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            '"tests_modela"."name"::text NOT LIKE %s',
+            '"app_mysql_modelpostgresqla"."name"::text NOT LIKE %s',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
@@ -799,17 +803,17 @@ class NeLookupPostgreSQLTest(TestCase):
     def test_neendswith_postgresql_like_with_other_field(self):
 
         lookup = EndsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r'''"tests_modela"."name"::text LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')''',  # noqa E501
+            r'''"app_mysql_modelpostgresqla"."name"::text LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeEndsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r'''"tests_modela"."name"::text NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')''',  # noqa E501
+            r'''"app_mysql_modelpostgresqla"."name"::text NOT LIKE '%%' || REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_')''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
@@ -818,17 +822,17 @@ class NeLookupPostgreSQLTest(TestCase):
         arg = 'test string'
 
         lookup = IEndsWith(self.field.cached_col, arg)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) LIKE UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) LIKE UPPER(%s)',
             lookup_sql[0],
         )
         self.assertEqual(['%' + arg], lookup_sql[1])
 
         ne_lookup = NeIEndsWith(self.field.cached_col, arg)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            'UPPER("tests_modela"."name"::text) NOT LIKE UPPER(%s)',
+            'UPPER("app_mysql_modelpostgresqla"."name"::text) NOT LIKE UPPER(%s)',
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
@@ -836,17 +840,17 @@ class NeLookupPostgreSQLTest(TestCase):
     def test_neiendswith_postgresql_like_with_other_field(self):
 
         lookup = IEndsWith(self.field.cached_col, self.other_field.cached_col)
-        lookup_sql = lookup.as_sql(self.compiler, connection)
+        lookup_sql = lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r'''UPPER("tests_modela"."name"::text) LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
+            r'''UPPER("app_mysql_modelpostgresqla"."name"::text) LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
             lookup_sql[0],
         )
         self.assertEqual([], lookup_sql[1])
 
         ne_lookup = NeIEndsWith(self.field.cached_col, self.other_field.cached_col)
-        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connection)
+        ne_lookup_sql = ne_lookup.as_sql(self.compiler, connections['db_postgresql'])
         self.assertEqual(
-            r'''UPPER("tests_modela"."name"::text) NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("tests_modelb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
+            r'''UPPER("app_mysql_modelpostgresqla"."name"::text) NOT LIKE '%%' || UPPER(REPLACE(REPLACE(REPLACE(("app_mysql_modelpostgresqlb"."name"), '\', '\\'), '%%', '\%%'), '_', '\_'))''',  # noqa E501
             ne_lookup_sql[0],
         )
         self.assertEqual([], ne_lookup_sql[1])
