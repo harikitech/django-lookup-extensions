@@ -23,7 +23,7 @@ def runtests():
 
     TestRunner = get_runner(settings)
     test_runner = TestRunner(verbosity=2, interactive=False)
-    test_runner.setup_databases()
+    # test_runner.setup_databases()
     failures = test_runner.run_tests(['tests'])
     sys.exit(bool(failures))
 
