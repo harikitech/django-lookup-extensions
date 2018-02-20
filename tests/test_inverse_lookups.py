@@ -23,7 +23,6 @@ from inverse_lookup.lookups import (
     NeIExact,
     NeIStartsWith,
     NeStartsWith,
-    VENDOR_DIALECT,
 )
 from tests.app_default.models import (
     ModelA,
