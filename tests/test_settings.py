@@ -35,7 +35,13 @@ DATABASES = {
 }
 
 if os.environ.get('TEST_WITH_OLD_SQLITE', None) == 'yes':
-    DATABASES['default']['TEST']['NAME'] = ':memory:'
+    DATABASES['default'] = {
+        'NAME': 'default',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': ':memory:',
+        }
+    }
 
 if os.environ.get('TEST_WITH_MYSQL', None) == 'yes':
     import pymysql
@@ -66,4 +72,3 @@ if os.environ.get('TEST_WITH_POSTGRES', None) == 'yes':
     }
 
 DATABASE_ROUTERS = ['tests.test_routers.TestRouter']
-

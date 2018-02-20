@@ -35,7 +35,10 @@ from .models import (
 )
 
 
-@unittest.skipUnless(connection.vendor == 'sqlite', 'sqlite tests')
+@unittest.skipUnless(
+    connection.vendor == 'sqlite',
+    'sqlite tests',
+)
 class NeLookupSqliteTest(TestCase):
     def setUp(self):
         super(NeLookupSqliteTest, self).setUp()
@@ -304,7 +307,10 @@ class NeLookupSqliteTest(TestCase):
         self.assertEqual([], ne_lookup_sql[1])
 
 
-@unittest.skipUnless('db_mysql' in connections and connections['db_mysql'].vendor == 'mysql', 'mysql tests')
+@unittest.skipUnless(
+    'db_mysql' in connections and connections['db_mysql'].vendor == 'mysql',
+    'mysql tests',
+)
 class NeLookupMySqlTest(TestCase):
     def setUp(self):
         super(NeLookupMySqlTest, self).setUp()
@@ -579,7 +585,10 @@ class NeLookupMySqlTest(TestCase):
         self.assertEqual([], ne_lookup_sql[1])
 
 
-@unittest.skipUnless('db_postgresql' in connections and connections['db_postgresql'].vendor == 'postgresql', 'postgresql tests')
+@unittest.skipUnless(
+    'db_postgresql' in connections and connections['db_postgresql'].vendor == 'postgresql',
+    'postgresql tests',
+)
 class NeLookupPostgreSQLTest(TestCase):
     def setUp(self):
         super(NeLookupPostgreSQLTest, self).setUp()
