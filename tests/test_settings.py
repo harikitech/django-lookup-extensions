@@ -56,7 +56,7 @@ if os.environ.get('TEST_WITH_MYSQL', None) == 'yes':
         'PASSWORD': '',
         'TEST': {
             # https://github.com/hackoregon/devops-17/issues/46#issuecomment-288775868
-            'NAME': 'test_db_mysql_' + os.getenv('TRAVIS_BUILD_NUMBER', "")
+            'NAME': 'test_db_mysql_' + os.getenv('TRAVIS_JOB_NUMBER', "").replace('.', '_')
         }
     }
 
@@ -70,7 +70,7 @@ if os.environ.get('TEST_WITH_POSTGRESQL', None) == 'yes':
         'USER': 'postgres',
         'TEST': {
             # https://github.com/hackoregon/devops-17/issues/46#issuecomment-288775868
-            'NAME': 'test_db_postgresql_' + os.getenv('TRAVIS_BUILD_NUMBER', "")
+            'NAME': 'test_db_postgresql_' + os.getenv('TRAVIS_JOB_NUMBER', "").replace('.', '_')
         }
     }
 
