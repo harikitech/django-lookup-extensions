@@ -28,3 +28,19 @@ class TestRouter(object):
         elif model._meta.app_label == 'app_postgresql':
             return 'db_postgresql'
         return None
+
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
+        """
+        Make sure the auth app only appears in the 'auth_db'
+        database.
+        """
+        if app_label == 'app_default':
+            return db == 'default'
+        elif app_label == 'app_mysql':
+            return db == 'db_mysql'
+        elif app_label == 'app_postgresql':
+            return db == 'db_postgresql'
+
+        if app_label == 'auth':
+            return db == 'auth_db'
+        return None

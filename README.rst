@@ -2,6 +2,12 @@
 Django inverse lookup
 ============================
 
+.. image:: https://img.shields.io/travis/uncovertruth/django-inverse-lookup.svg
+    :target: https://travis-ci.org/uncovertruth/django-inverse-lookup
+
+.. image:: https://pyup.io/repos/github/uncovertruth/django-inverse-lookup/shield.svg
+     :target: https://pyup.io/repos/github/uncovertruth/django-inverse-lookup/
+     :alt: Updates
 
 Django inverse lookup use **NOT** query.
 

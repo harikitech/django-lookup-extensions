@@ -25,11 +25,15 @@ from inverse_lookup.lookups import (
     NeStartsWith,
     VENDOR_DIALECT,
 )
-from .models import (
+from tests.app_default.models import (
     ModelA,
     ModelB,
+)
+from tests.app_mysql.models import (
     ModelMySQLA,
     ModelMySQLB,
+)
+from tests.app_postgresql.models import (
     ModelPostgreSQLA,
     ModelPostgreSQLB,
 )
@@ -48,10 +52,6 @@ class NeLookupSqliteTest(TestCase):
         self.field = ModelA._meta.get_field('name')
         self.other_field = ModelB._meta.get_field('name')
 
-        self.sqlite_dialect = VENDOR_DIALECT['sqlite']
-        self.mysql_dialect = VENDOR_DIALECT['mysql']
-        self.postgresql_dialect = VENDOR_DIALECT['postgresql']
-
     def tearDown(self):
         super(NeLookupSqliteTest, self).tearDown()
 
@@ -65,6 +65,18 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
+        data1 = ModelA(name='test name')
+        data1.save()
+        data2 = ModelA(name='test name2')
+        data2.save()
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neexact='test name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__neexact='test name1').count(),
+        )
 
     def test_neiexact_sqlite(self):
         arg = 'test string'
@@ -599,10 +611,6 @@ class NeLookupPostgreSQLTest(TestCase):
         self.compiler = self.query.get_compiler(connection=self.using_connection)
         self.field = ModelPostgreSQLA._meta.get_field('name')
         self.other_field = ModelPostgreSQLB._meta.get_field('name')
-
-        self.sqlite_dialect = VENDOR_DIALECT['sqlite']
-        self.mysql_dialect = VENDOR_DIALECT['mysql']
-        self.postgresql_dialect = VENDOR_DIALECT['postgresql']
 
     def tearDown(self):
         super(NeLookupPostgreSQLTest, self).tearDown()

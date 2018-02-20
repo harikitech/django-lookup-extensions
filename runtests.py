@@ -6,6 +6,9 @@ from __future__ import absolute_import, unicode_literals
 import os
 import sys
 
+from django.test.runner import setup_databases
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'tests.test_settings')
 
 
@@ -19,7 +22,8 @@ def runtests():
         django.setup()
 
     TestRunner = get_runner(settings)
-    test_runner = TestRunner(verbosity=2, interactive=True)
+    test_runner = TestRunner(verbosity=2, interactive=False)
+    test_runner.setup_databases()
     failures = test_runner.run_tests(['tests'])
     sys.exit(bool(failures))
 

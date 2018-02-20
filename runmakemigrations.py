@@ -15,7 +15,7 @@ def runmigrations():
     if hasattr(django, 'setup'):
         django.setup()
 
-    call_command('makemigrations', 'tests')
+    call_command('makemigrations', 'tests', 'app_default', 'app_mysql', 'app_postgresql')
 
 
 if __name__ == "__main__":

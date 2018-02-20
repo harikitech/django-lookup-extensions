@@ -8,6 +8,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'inverse_lookup',
     'tests',
+    'tests.app_default',
+    'tests.app_mysql',
+    'tests.app_postgresql',
 ]
 
 DATABASES = {
