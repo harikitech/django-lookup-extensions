@@ -35,7 +35,7 @@ DATABASES = {
 }
 
 if os.environ.get('TEST_WITH_OLD_SQLITE', None) == 'yes':
-    DATABASE['default']['TEST']['NAME'] = ':memory:'
+    DATABASES['default']['TEST']['NAME'] = ':memory:'
 
 if os.environ.get('TEST_WITH_MYSQL', None) == 'yes':
     import pymysql
