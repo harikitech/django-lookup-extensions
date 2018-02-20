@@ -57,7 +57,7 @@ if os.environ.get('TEST_WITH_MYSQL', None) == 'yes':
         }
     }
 
-if os.environ.get('TEST_WITH_POSTGRES', None) == 'yes':
+if os.environ.get('TEST_WITH_POSTGRESQL', None) == 'yes':
     if os.environ.get('TEST_USE_CFFI', None) == 'yes':
         from psycopg2cffi import compat
         compat.register()
