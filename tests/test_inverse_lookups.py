@@ -808,7 +808,6 @@ class NeLookupMySqlTest(TestCase):
             ModelMySQLA.objects.filter(name__neiendswith='test Nam').count(),
         )
 
-
     def test_neiendswith_mysql_like_with_other_field(self):
 
         lookup = IEndsWith(self.field.cached_col, self.other_field.cached_col)
