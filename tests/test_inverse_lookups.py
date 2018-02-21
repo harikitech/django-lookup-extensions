@@ -51,6 +51,9 @@ class NeLookupSqliteTest(TestCase):
         self.field = ModelA._meta.get_field('name')
         self.other_field = ModelB._meta.get_field('name')
 
+        ModelA.objects.create(name='test name')
+        ModelA.objects.create(name='test name1')
+
     def tearDown(self):
         super(NeLookupSqliteTest, self).tearDown()
 
@@ -64,17 +67,17 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
-        data1 = ModelA(name='test name')
-        data1.save()
-        data2 = ModelA(name='test name2')
-        data2.save()
         self.assertEqual(
             1,
             ModelA.objects.filter(name__neexact='test name').count(),
         )
         self.assertEqual(
             2,
-            ModelA.objects.filter(name__neexact='test name1').count(),
+            ModelA.objects.filter(name__neexact='test Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__neexact='test name9').count(),
         )
 
     def test_neiexact_sqlite(self):
@@ -82,6 +85,7 @@ class NeLookupSqliteTest(TestCase):
 
         lookup = IExact(self.field.cached_col, arg)
         lookup_sql = lookup.as_sql(self.compiler, self.using_connection)
+        # https://stackoverflow.com/a/973665
         self.assertEqual(
             r'''"app_default_modela"."name" LIKE %s ESCAPE '\'''',
             lookup_sql[0],
@@ -95,6 +99,18 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neiexact='test name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neiexact='test Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__neiexact='test name9').count(),
+        )
 
     def test_necontains_sqlite(self):
         arg = 'test string'
@@ -114,6 +130,23 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__necontains='test name').count(),
+        )
+        # https://stackoverflow.com/a/973665
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__necontains='test Name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__necontains='test Name1').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__necontains='est nam').count(),
+        )
 
     def test_necontains_sqlite_like_with_other_field(self):
 
@@ -151,6 +184,23 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__neicontains='test name').count(),
+        )
+        # https://stackoverflow.com/a/973665
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__neicontains='test Name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neicontains='test Name1').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__neicontains='est nam').count(),
+        )
 
     def test_neicontains_sqlite_like_with_other_field(self):
 
@@ -188,6 +238,19 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__nestartswith='test').count(),
+        )
+        # https://stackoverflow.com/a/973665
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__nestartswith='Test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__nestartswith='est Name').count(),
+        )
 
     def test_nestartswith_sqlite_like_with_other_field(self):
 
@@ -225,6 +288,19 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__neistartswith='test').count(),
+        )
+        # https://stackoverflow.com/a/973665
+        self.assertEqual(
+            0,
+            ModelA.objects.filter(name__neistartswith='Test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__neistartswith='est Name').count(),
+        )
 
     def test_neistartswith_sqlite_like_with_other_field(self):
 
@@ -262,6 +338,19 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neendswith='name').count(),
+        )
+        # https://stackoverflow.com/a/973665
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neendswith='Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__neendswith='test Nam').count(),
+        )
 
     def test_neendswith_sqlite_like_with_other_field(self):
 
@@ -299,6 +388,19 @@ class NeLookupSqliteTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neiendswith='name').count(),
+        )
+        # https://stackoverflow.com/a/973665
+        self.assertEqual(
+            1,
+            ModelA.objects.filter(name__neiendswith='Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelA.objects.filter(name__neiendswith='test Nam').count(),
+        )
 
     def test_neiendswith_sqlite_like_with_other_field(self):
 
