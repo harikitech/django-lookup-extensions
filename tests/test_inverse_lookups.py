@@ -436,8 +436,12 @@ class NeLookupMySqlTest(TestCase):
         self.field = ModelMySQLA._meta.get_field('name')
         self.other_field = ModelMySQLB._meta.get_field('name')
 
+        ModelMySQLA.objects.create(name='test name')
+        ModelMySQLA.objects.create(name='test name1')
+
     def tearDown(self):
         super(NeLookupMySqlTest, self).tearDown()
+        ModelMySQLA.objects.all().delete()
 
     def test_neexact(self):
         arg = 'test string'
@@ -457,6 +461,19 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neexact='test name').count(),
+        )
+        # this is the mysql!
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neexact='test Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neexact='test name9').count(),
+        )
 
     def test_neiexact_mysql(self):
         arg = 'test string'
@@ -476,6 +493,19 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neiexact='test name').count(),
+        )
+        # this is mysql!
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neiexact='test Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neiexact='test name9').count(),
+        )
 
     def test_necontains_mysql(self):
         arg = 'test string'
@@ -495,6 +525,23 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__necontains='test name').count(),
+        )
+        # NOT LIKE BINARY
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__necontains='test Name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__necontains='test name1').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__necontains='est nam').count(),
+        )
 
     def test_necontains_mysql_like_with_other_field(self):
 
@@ -532,6 +579,22 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__neicontains='test name').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__neicontains='test Name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neicontains='test name1').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__neicontains='est nam').count(),
+        )
 
     def test_neicontains_mysql_like_with_other_field(self):
 
@@ -569,6 +632,22 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__nestartswith='test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__nestartswith='Test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__nestartswith='est name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__nestartswith='est Name').count(),
+        )
 
     def test_nestartswith_mysql_like_with_other_field(self):
 
@@ -606,6 +685,22 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__neistartswith='test').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__neistartswith='Test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neistartswith='est name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neistartswith='est Name').count(),
+        )
 
     def test_neistartswith_mysql_like_with_other_field(self):
 
@@ -643,6 +738,22 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neendswith='name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neendswith='Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neendswith='test nam').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neendswith='test Nam').count(),
+        )
 
     def test_neendswith_mysql_like_with_other_field(self):
 
@@ -680,6 +791,23 @@ class NeLookupMySqlTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neiendswith='name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__neiendswith='Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neiendswith='test nam').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelMySQLA.objects.filter(name__neiendswith='test Nam').count(),
+        )
+
 
     def test_neiendswith_mysql_like_with_other_field(self):
 
@@ -712,9 +840,12 @@ class NeLookupPostgreSQLTest(TestCase):
         self.compiler = self.query.get_compiler(connection=self.using_connection)
         self.field = ModelPostgreSQLA._meta.get_field('name')
         self.other_field = ModelPostgreSQLB._meta.get_field('name')
+        ModelPostgreSQLA.objects.create(name='test name')
+        ModelPostgreSQLA.objects.create(name='test name1')
 
     def tearDown(self):
         super(NeLookupPostgreSQLTest, self).tearDown()
+        ModelPostgreSQLA.objects.all().delete()
 
     def test_neexact(self):
         arg = 'test string'
@@ -734,6 +865,18 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__neexact='test name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neexact='test Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neexact='test name9').count(),
+        )
 
     def test_neiexact_postgresql(self):
         arg = 'test string'
@@ -753,6 +896,18 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__neiexact='test name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__neiexact='test Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neiexact='test name9').count(),
+        )
 
     def test_necontains_postgresql(self):
         arg = 'test string'
@@ -772,6 +927,18 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__necontains='test name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__necontains='test Name').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__necontains='est nam').count(),
+        )
 
     def test_necontains_postgresql_like_with_other_field(self):
 
@@ -809,6 +976,18 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__neicontains='test name').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__neicontains='test Name').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__neicontains='est nam').count(),
+        )
 
     def test_neicontains_postgresql_like_with_other_field(self):
 
@@ -846,6 +1025,22 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__nestartswith='test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__nestartswith='Test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__nestartswith='est name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__nestartswith='est Name').count(),
+        )
 
     def test_nestartswith_postgresql_like_with_other_field(self):
 
@@ -883,6 +1078,22 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual([arg + '%'], ne_lookup_sql[1])
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__neistartswith='test').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__neistartswith='Test').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neistartswith='est name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neistartswith='est Name').count(),
+        )
 
     def test_neistartswith_postgresql_like_with_other_field(self):
 
@@ -920,6 +1131,22 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__neendswith='name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neendswith='Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neendswith='test nam').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neendswith='test Nam').count(),
+        )
 
     def test_neendswith_postgresql_like_with_other_field(self):
 
@@ -957,6 +1184,22 @@ class NeLookupPostgreSQLTest(TestCase):
             ne_lookup_sql[0],
         )
         self.assertEqual(['%' + arg], ne_lookup_sql[1])
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__neiendswith='name').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__neiendswith='Name').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neiendswith='test nam').count(),
+        )
+        self.assertEqual(
+            2,
+            ModelPostgreSQLA.objects.filter(name__neiendswith='test Nam').count(),
+        )
 
     def test_neiendswith_postgresql_like_with_other_field(self):
 
