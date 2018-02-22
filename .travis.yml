@@ -43,15 +43,15 @@ install:
 - pip install -U pip setuptools tox wheel
 script:
 - tox -e "${TOX_ENV}"
-# deploy:
-#   provider: pypi
-#   distributions: sdist bdist_wheel
-#   user: uncovertruth
-#   password:
-#     secure: PLEASE_REPLACE_ME
-#   on:
-#     tags: true
-#     repo: uncovertruth/django-lookup-extensions
-#     condition: $TOX_ENV = py36-dj20
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: uncovertruth
+  password:
+    secure: PLEASE_REPLACE_ME
+  on:
+    tags: true
+    repo: uncovertruth/django-lookup-extensions
+    condition: $TOX_ENV = py36-dj20
 notifications:
   email: false
