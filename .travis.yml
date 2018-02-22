@@ -1,0 +1,57 @@
+sudo: false
+language: python
+cache: pip
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TOX_ENV=py27-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes
+  - python: pypy
+    env: TOX_ENV=pypy-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes TOX_TEST_USE_CFFI=yes
+  - python: 3.4
+    env: TOX_ENV=py34-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: 3.5
+    env: TOX_ENV=py35-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: 3.6
+    env: TOX_ENV=py36-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_USE_CFFI=yes
+  - python: 3.4
+    env: TOX_ENV=py34-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: 3.5
+    env: TOX_ENV=py35-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: 3.6
+    env: TOX_ENV=py36-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_USE_CFFI=yes
+  - python: 3.5
+    env: TOX_ENV=py35-djdev TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: 3.6
+    env: TOX_ENV=py36-djdev TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+  - python: 3.6
+    env: TOX_ENV=flake8
+  - python: 3.6
+    env: TOX_ENV=isort
+  - python: 3.6
+    env: TOX_ENV=readme
+  - python: 3.6
+    env: TOX_ENV=check-manifest
+services:
+  - postgresql
+  - mysql
+install:
+- pip install -U pip setuptools tox wheel
+script:
+- tox -e "${TOX_ENV}"
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: uncovertruth
+  password:
+    secure: PLEASE_REPLACE_ME
+  on:
+    tags: true
+    repo: uncovertruth/django-lookup-extensions
+    condition: $TOX_ENV = py36-dj20
+notifications:
+  email: false
