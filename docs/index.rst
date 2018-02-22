@@ -1,4 +1,4 @@
-Welcome to Django inverse lookup's documentation!
+Welcome to Django lookup extensions's documentation!
 ==================================================
 
 .. toctree::

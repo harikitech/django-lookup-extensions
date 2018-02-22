@@ -14,7 +14,7 @@ from django.db.models.lookups import (
 from django.db.models.sql.query import Query
 from django.test import TestCase
 
-from inverse_lookup.lookups import (
+from lookup_extensions.lookups import (
     NeContains,
     NeEndsWith,
     NeExact,

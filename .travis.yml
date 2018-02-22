@@ -51,7 +51,7 @@ script:
 #     secure: PLEASE_REPLACE_ME
 #   on:
 #     tags: true
-#     repo: uncovertruth/django-inverse-lookup
+#     repo: uncovertruth/django-lookup-extensions
 #     condition: $TOX_ENV = py36-dj20
 notifications:
   email: false

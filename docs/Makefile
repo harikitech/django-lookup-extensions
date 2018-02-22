@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = django-inverse-lookup
+SPHINXPROJ    = django-lookup-extensions
 SOURCEDIR     = .
 BUILDDIR      = _build
 

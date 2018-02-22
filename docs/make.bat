@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=django-inverse-lookup
+set SPHINXPROJ=django-lookup-extensions
 
 if "%1" == "" goto help
 

@@ -6,7 +6,7 @@ SECRET_KEY = 'fake-key'
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'inverse_lookup',
+    'lookup_extensions',
     'tests',
     'tests.app_default',
     'tests.app_mysql',

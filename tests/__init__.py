@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-"""Unit test package for django-inverse-lookup."""
+"""Unit test package for django-lookup-extensions."""

@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use Django inverse lookup in a project::
+To use Django lookup extensions in a project::
 
-    import inverse_lookup
+    import lookup_extensions

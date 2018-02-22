@@ -1,19 +1,19 @@
 ============================
-Django inverse lookup
+Django lookup extensions
 ============================
 
-.. image:: https://img.shields.io/travis/uncovertruth/django-inverse-lookup.svg
-    :target: https://travis-ci.org/uncovertruth/django-inverse-lookup
+.. image:: https://img.shields.io/travis/uncovertruth/django-lookup-extensions.svg
+    :target: https://travis-ci.org/uncovertruth/django-lookup-extensions
 
-.. image:: https://pyup.io/repos/github/uncovertruth/django-inverse-lookup/shield.svg
-     :target: https://pyup.io/repos/github/uncovertruth/django-inverse-lookup/
+.. image:: https://pyup.io/repos/github/uncovertruth/django-lookup-extensions/shield.svg
+     :target: https://pyup.io/repos/github/uncovertruth/django-lookup-extensions/
      :alt: Updates
 
-Django inverse lookup use **NOT** query.
+Django lookup extensions use **NOT** query.
 
 
 * Free software: MIT license
-* Documentation: https://django-inverse-lookup.readthedocs.io.
+* Documentation: https://django-lookup-extensions.readthedocs.io.
 
 
 Features

@@ -5,7 +5,7 @@
 
 from setuptools import find_packages, setup
 
-import inverse_lookup
+import lookup_extensions
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -22,19 +22,19 @@ test_requirements = [
 ]
 
 setup(
-    name='django-inverse-lookup',
-    version=inverse_lookup.__version__,
-    description="Django inverse lookup use NOT query.",
+    name='django-lookup-extensions',
+    version=lookup_extensions.__version__,
+    description="Django lookup extensions use NOT query.",
     long_description=readme + '\n\n' + history,
-    author=inverse_lookup.__author__,
-    author_email=inverse_lookup.__email__,
-    url='https://github.com/uncovertruth/django-inverse-lookup',
+    author=lookup_extensions.__author__,
+    author_email=lookup_extensions.__email__,
+    url='https://github.com/uncovertruth/django-lookup-extensions',
     packages=find_packages(exclude=('tests', 'docs')),
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='django, inverse lookup, filter',
+    keywords='django, lookup extensions, filter',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Web Environment',

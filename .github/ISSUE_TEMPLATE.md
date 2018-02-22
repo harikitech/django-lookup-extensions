@@ -1,4 +1,4 @@
-* Django inverse lookup version:
+* Django lookup extensions version:
 * Python version:
 * Operating System:
 
