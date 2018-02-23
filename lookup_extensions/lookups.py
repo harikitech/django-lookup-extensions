@@ -69,6 +69,7 @@ VENDOR_DIALECT = {
         },
     },
 }
+VENDOR_DIALECT['redshift'] = VENDOR_DIALECT['postgresql']
 
 
 class NeLookup(Lookup):

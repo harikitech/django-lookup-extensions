@@ -71,5 +71,17 @@ if os.environ.get('TEST_WITH_POSTGRESQL', None) == 'yes':
             'NAME': 'test_db_postgresql_' + os.getenv('TRAVIS_JOB_NUMBER', "").replace('.', '_')
         }
     }
+elif os.environ.get('TEST_WITH_REDSHIFT', None) == 'yes':
+    DATABASES['db_postgresql'] = {
+        'NAME': 'testredshift',
+        'ENGINE': 'django_redshift_backend',
+        'USER': '<REDSHIFT_USER>',
+        'PASSWORD': '<REDSHIFT_PASSWORD>',
+        'HOST': '<REDSHIFT_HOST>',
+        'PORT': '5439',
+        'TEST': {
+            'NAME': 'testredshift'
+        }
+    }
 
 DATABASE_ROUTERS = ['tests.test_routers.TestRouter']
