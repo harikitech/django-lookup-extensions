@@ -4,8 +4,6 @@ import os
 
 SECRET_KEY = 'fake-key'
 INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
     'lookup_extensions',
     'tests',
     'tests.app_default',
