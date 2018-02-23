@@ -1,3 +1,4 @@
+import os
 
 
 class TestRouter(object):
@@ -38,9 +39,8 @@ class TestRouter(object):
             return db == 'default'
         elif app_label == 'app_mysql':
             return db == 'db_mysql'
-        elif app_label == 'app_postgresql':
-            return db == 'db_postgresql'
-
-        if app_label == 'auth':
-            return db == 'auth_db'
+        elif app_label == 'app_postgresql' and db == 'db_postgresql':
+            if os.environ.get('TEST_WITH_REDSHIFT', None) == 'yes':
+                return False
+            return True
         return None

@@ -21,6 +21,8 @@ def runtests():
 
     TestRunner = get_runner(settings)
     test_runner = TestRunner(verbosity=2, interactive=False)
+    if os.environ.get('TEST_WITH_REDSHIFT', None) == 'yes':
+        test_runner.keepdb = True
     failures = test_runner.run_tests(['tests'])
     sys.exit(bool(failures))
 

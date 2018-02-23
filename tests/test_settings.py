@@ -4,8 +4,6 @@ import os
 
 SECRET_KEY = 'fake-key'
 INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
     'lookup_extensions',
     'tests',
     'tests.app_default',
@@ -71,6 +69,18 @@ if os.environ.get('TEST_WITH_POSTGRESQL', None) == 'yes':
         'TEST': {
             # https://github.com/hackoregon/devops-17/issues/46#issuecomment-288775868
             'NAME': 'test_db_postgresql_' + os.getenv('TRAVIS_JOB_NUMBER', "").replace('.', '_')
+        }
+    }
+elif os.environ.get('TEST_WITH_REDSHIFT', None) == 'yes':
+    DATABASES['db_postgresql'] = {
+        'NAME': 'testredshift',
+        'ENGINE': 'django_redshift_backend',
+        'USER': '<REDSHIFT_USER>',
+        'PASSWORD': '<REDSHIFT_PASSWORD>',
+        'HOST': '<REDSHIFT_HOST>',
+        'PORT': '5439',
+        'TEST': {
+            'NAME': 'testredshift'
         }
     }
 
