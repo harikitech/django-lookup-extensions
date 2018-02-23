@@ -828,7 +828,7 @@ class NeLookupMySqlTest(TestCase):
 
 
 @unittest.skipUnless(
-    ('db_postgresql' in connections and connections['db_postgresql'].vendor == 'postgresql' or \
+    ('db_postgresql' in connections and connections['db_postgresql'].vendor == 'postgresql' or
      'db_postgresql' in connections and connections['db_postgresql'].vendor == 'redshift'),
     'postgresql tests',
 )
@@ -842,6 +842,7 @@ class NeLookupPostgreSQLTest(TestCase):
         self.other_field = ModelPostgreSQLB._meta.get_field('name')
         ModelPostgreSQLA.objects.create(id=1, name='test name')
         ModelPostgreSQLA.objects.create(id=2, name='test name1')
+
     def tearDown(self):
         super(NeLookupPostgreSQLTest, self).tearDown()
         ModelPostgreSQLA.objects.all().delete()
