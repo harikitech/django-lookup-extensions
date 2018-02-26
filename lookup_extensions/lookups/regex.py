@@ -6,6 +6,28 @@ from django.db.models.lookups import (
     Lookup,
 )
 
+VENDOR_SYNONYMS = {
+    'postgresql': {
+            '\\<': '[[:<:]]',
+            '\\>': '[[:>:]]',
+    },
+    'redshift': {
+            '\\<': '[[:<:]]',
+            '\\>': '[[:>:]]',
+            # '\\d': '[[:digit:]]',
+            # '\\D': '[^[:digit:]]',
+            # '\\w': '[[:word:]]',
+            # '\\W': '[^[:word:]]',
+            # '\\s': '[[:space:]]',
+            # '\\S': '[^[:space:]]',
+    }
+}
+for vendor in VENDOR_SYNONYMS.keys():
+    expressions = []
+    for expression in VENDOR_SYNONYMS[vendor]:
+        expressions.append(expression)
+    VENDOR_SYNONYMS[vendor]['expressions'] = expressions
+
 class AbstractRegexLookup(Lookup):
     def lookup_operator(self):
         raise NotImplementedError()
@@ -29,6 +51,19 @@ class AbstractRegexLookup(Lookup):
 
     def get_rhs_op(self, connection, rhs):
         return self.lookup_operator() % rhs
+
+    def process_rhs(self, qn, connection):
+        rhs, params = super().process_rhs(qn, connection)
+        param = params[0]
+        if params and not self.bilateral_transforms:
+            for expression in VENDOR_SYNONYMS[connection.vendor]['expressions']:
+                param = param.replace(
+                    expression,
+                    VENDOR_SYNONYMS[connection.vendor][expression],
+                )
+            params[0] = param
+        return rhs, params
+
 
 @Field.register_lookup
 class RegexLookup(AbstractRegexLookup):
