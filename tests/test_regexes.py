@@ -130,6 +130,12 @@ class RegexLookupTest(TestCase):
             ModelPostgreSQLA.objects.filter(name__regex=r'I \w').count(),
         )
 
+    def test_regex_sql_injection(self):
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__regex="' or 'A'='A").count(),
+        )
+
     def test_neregex(self):
         self.assertEqual(
             8,
@@ -260,4 +266,3 @@ class RegexLookupPostgreSQLTest(TestCase):
             8,
             ModelPostgreSQLA.objects.filter(name__neregex=r'/blog/2011/1{1,2}?/26/mount_box_net_on_ubuntu/').count(),
         )
-

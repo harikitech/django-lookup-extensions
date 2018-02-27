@@ -11,22 +11,15 @@ VENDOR_SYNONYMS = {
             '\\<': '[[:<:]]',
             '\\>': '[[:>:]]',
     },
-    'redshift': {
-            '\\<': '[[:<:]]',
-            '\\>': '[[:>:]]',
-            # '\\d': '[[:digit:]]',
-            # '\\D': '[^[:digit:]]',
-            # '\\w': '[[:word:]]',
-            # '\\W': '[^[:word:]]',
-            # '\\s': '[[:space:]]',
-            # '\\S': '[^[:space:]]',
-    }
 }
 for vendor in VENDOR_SYNONYMS.keys():
     expressions = []
     for expression in VENDOR_SYNONYMS[vendor]:
         expressions.append(expression)
     VENDOR_SYNONYMS[vendor]['expressions'] = expressions
+
+VENDOR_SYNONYMS['redshift'] = VENDOR_SYNONYMS['postgresql']
+
 
 class AbstractRegexLookup(Lookup):
     def lookup_operator(self):
