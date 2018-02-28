@@ -65,7 +65,7 @@ if os.environ.get('TEST_WITH_POSTGRESQL', None) == 'yes':
     DATABASES['db_postgresql'] = {
         'NAME': 'db_postgresql',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'tsuyuki',
+        'USER': 'postgres',
         'TEST': {
             # https://github.com/hackoregon/devops-17/issues/46#issuecomment-288775868
             'NAME': 'test_db_postgresql_' + os.getenv('TRAVIS_JOB_NUMBER', "").replace('.', '_')
