@@ -6,10 +6,37 @@ from django.db.models.lookups import (
     Lookup,
 )
 
+VENDOR_DIALECT = {
+    'mysql': {
+        'operators': {
+            'regex': 'REGEXP BINARY %s',
+            'neregex': 'NOT REGEXP BINARY %s',
+        },
+    },
+    'postgresql': {
+        'operators': {
+            'regex': '~ %s',
+            'neregex': '!~ %s',
+        },
+    },
+}
+VENDOR_DIALECT['redshift'] = VENDOR_DIALECT['postgresql']
+
+
 VENDOR_SYNONYMS = {
     'postgresql': {
             '\\<': '[[:<:]]',
             '\\>': '[[:>:]]',
+    },
+    'mysql': {
+            '\\<': '[[:<:]]',
+            '\\>': '[[:>:]]',
+            '\\d': '[[:digit:]]',
+            '\\D': '[^[:digit:]]',
+            '\\w': '[[:alnum:]_]',
+            '\\W': '[^[:alnum:]_]',
+            '\\s': '[[:space:]]',
+            '\\S': '[^[:space:]]',
     },
 }
 for vendor in VENDOR_SYNONYMS.keys():
@@ -56,6 +83,9 @@ class AbstractRegexLookup(Lookup):
                 )
             params[0] = param
         return rhs, params
+
+    def get_rhs_op(self, connection, rhs):
+        return VENDOR_DIALECT[connection.vendor]['operators'][self.lookup_name] % rhs
 
 
 @Field.register_lookup
