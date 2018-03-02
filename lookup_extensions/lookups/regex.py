@@ -73,7 +73,7 @@ class AbstractRegexLookup(Lookup):
         return self.lookup_operator() % rhs
 
     def process_rhs(self, qn, connection):
-        rhs, params = super().process_rhs(qn, connection)
+        rhs, params = super(AbstractRegexLookup, self).process_rhs(qn, connection)
         param = params[0]
         if params and not self.bilateral_transforms:
             for expression in VENDOR_SYNONYMS[connection.vendor]['expressions']:
