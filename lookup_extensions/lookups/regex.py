@@ -48,7 +48,7 @@ for vendor in VENDOR_SYNONYMS.keys():
 VENDOR_SYNONYMS['redshift'] = VENDOR_SYNONYMS['postgresql']
 
 
-class AbstractRegexLookup(Lookup):
+class AbstractRegexLookup(FieldGetDbPrepValueMixin, Lookup):
     def lookup_operator(self):
         raise NotImplementedError()
 
@@ -58,7 +58,6 @@ class AbstractRegexLookup(Lookup):
             connection,
             lhs,
         )
-        field_internal_type = self.lhs.output_field.get_internal_type()
         lhs_sql = '%s' % lhs_sql
         return lhs_sql, list(params)
 
@@ -68,9 +67,6 @@ class AbstractRegexLookup(Lookup):
         params.extend(rhs_params)
         rhs_sql = self.get_rhs_op(connection, rhs_sql)
         return '%s %s' % (lhs_sql, rhs_sql), params
-
-    def get_rhs_op(self, connection, rhs):
-        return self.lookup_operator() % rhs
 
     def process_rhs(self, qn, connection):
         rhs, params = super(AbstractRegexLookup, self).process_rhs(qn, connection)
@@ -85,19 +81,15 @@ class AbstractRegexLookup(Lookup):
         return rhs, params
 
     def get_rhs_op(self, connection, rhs):
-        return VENDOR_DIALECT[connection.vendor]['operators'][self.lookup_name] % rhs
+        return VENDOR_DIALECT[connection.vendor]['operators'][self.__class__.lookup_name] % rhs
 
 
 @Field.register_lookup
 class RegexLookup(AbstractRegexLookup):
     lookup_name = 'regex'
 
-    def lookup_operator(self):
-        return '~ %s'
 
 @Field.register_lookup
 class NeRegexLookup(AbstractRegexLookup):
     lookup_name = 'neregex'
 
-    def lookup_operator(self):
-        return '!~ %s'

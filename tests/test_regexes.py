@@ -1,6 +1,6 @@
 import unittest
 
-from django.db import connection, connections, router
+from django.db import connection
 from django.test import TestCase
 
 from tests.app_mysql.models import (
