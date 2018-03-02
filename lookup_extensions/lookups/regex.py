@@ -10,13 +10,17 @@ VENDOR_DIALECT = {
     'mysql': {
         'operators': {
             'regex': 'REGEXP BINARY %s',
+            'iregex': 'REGEXP %s',
             'neregex': 'NOT REGEXP BINARY %s',
+            'neiregex': 'NOT REGEXP %s',
         },
     },
     'postgresql': {
         'operators': {
             'regex': '~ %s',
+            'iregex': '~* %s',
             'neregex': '!~ %s',
+            'neiregex': '!~* %s',
         },
     },
 }
@@ -92,4 +96,3 @@ class RegexLookup(AbstractRegexLookup):
 @Field.register_lookup
 class NeRegexLookup(AbstractRegexLookup):
     lookup_name = 'neregex'
-

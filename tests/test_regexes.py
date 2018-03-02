@@ -130,6 +130,109 @@ class RegexLookupMySQLTest(TestCase):
             1,
             ModelMySQLA.objects.filter(name__regex=r'I \w').count(),
         )
+        # case sensitive
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__regex=r'i \w').count(),
+        )
+
+    def test_iregex(self):
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2017/0./07/kamakura_golden_week/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_week/*').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_[awe]eek/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_[^abcd]eek/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_(week|monthly)/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_we{2}k/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/1{1,2}/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/mount_box_ne\w{2}on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/11/26\Wmount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/11/2\d/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/\Dount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'i HAVE\shankaku space.').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/\Sount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/m(o)unt_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'^/Blog/2011/11/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex='/Blog/$').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'Abc\\nDef\\nf').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'Got\\tTab').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'Hello\s+a').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__iregex=r'\<Hankaku').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__regex=r'\<Ankaku').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__regex=r'Hankaku\>').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelMySQLA.objects.filter(name__regex=r'Hankak\>').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelMySQLA.objects.filter(name__regex=r'i \w').count(),
+        )
 
     def test_regex_sql_injection(self):
         self.assertEqual(
@@ -235,6 +338,104 @@ class RegexLookupMySQLTest(TestCase):
             ModelMySQLA.objects.filter(name__neregex=r'I \w').count(),
         )
         #  {1,2}? errors (1139, "Got error 'repetition-operator operand invalid' from regexp")
+
+    def test_neiregex(self):
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2017/0./07/kamakura_golden_week/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_week/*').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_[awe]eek/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_[^abcd]eek/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_(week|monthly)/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_we{2}k/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/1{1,2}/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/mount_box_ne\w{2}on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26\Wmount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/2\d/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/\Dount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'i HAVE\shankaku space.').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/\Sount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/m(o)unt_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'^/Blog/2011/11/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex='/Blog/$').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'Abc\\nDef\\nf').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'Got\\tTab').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'Hello\s+a').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'\<Hankaku').count(),
+        )
+        self.assertEqual(
+            9,
+            ModelMySQLA.objects.filter(name__neiregex=r'\<Ankaku').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'Hankaku\>').count(),
+        )
+        self.assertEqual(
+            9,
+            ModelMySQLA.objects.filter(name__neiregex=r'Hankak\>').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelMySQLA.objects.filter(name__neiregex=r'i \w').count(),
+        )
 
 
 @unittest.skipUnless(
@@ -358,6 +559,104 @@ class RegexLookupPostgreSQLRedshiftTest(TestCase):
             ModelPostgreSQLA.objects.filter(name__regex=r'I \w').count(),
         )
 
+    def test_iregex(self):
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2017/0./07/kamakura_golden_week/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_week/*').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_[awe]eek/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_[^abcd]eek/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_(week|monthly)/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2017/05/07/kamakura_golden_we{2}k/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/1{1,2}/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/mount_box_ne\w{2}on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/11/26\Wmount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/11/2\d/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/\Dount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'i HAVE\shankaku space.').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/\Sount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/11/26/m(o)unt_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'^/Blog/2011/11/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex='/Blog/$').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'Abc\\nDef\\nf').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'Got\\tTab').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'Hello\s+a').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'\<Hankaku').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__regex=r'\<Ankaku').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__regex=r'Hankaku\>').count(),
+        )
+        self.assertEqual(
+            0,
+            ModelPostgreSQLA.objects.filter(name__regex=r'Hankak\>').count(),
+        )
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__regex=r'i \w').count(),
+        )
+
     def test_regex_sql_injection(self):
         self.assertEqual(
             0,
@@ -462,6 +761,104 @@ class RegexLookupPostgreSQLRedshiftTest(TestCase):
             ModelPostgreSQLA.objects.filter(name__neregex=r'I \w').count(),
         )
 
+    def test_neiregex(self):
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2017/0./07/kamakura_golden_week/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_week/*').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_[awe]eek/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_[^abcd]eek/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_(week|monthly)/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2017/05/07/kamakura_golden_we{2}k/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/1{1,2}/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/mount_box_ne\w{2}on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26\Wmount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/11/2\d/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/\Dount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'i HAVE\shankaku space.').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/\Sount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/m(o)unt_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'^/Blog/2011/11/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex='/Blog/$').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'Abc\\nDef\\nf').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'Got\\tTab').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'Hello\s+a').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'\<Hankaku').count(),
+        )
+        self.assertEqual(
+            9,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'\<Ankaku').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'Hankaku\>').count(),
+        )
+        self.assertEqual(
+            9,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'Hankak\>').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'i \w').count(),
+        )
+
 
 @unittest.skipUnless(
     ('db_postgresql' in connections and connections['db_postgresql'].vendor == 'postgresql'),
@@ -493,4 +890,14 @@ class RegexLookupPostgreSQLTest(TestCase):
         self.assertEqual(
             8,
             ModelPostgreSQLA.objects.filter(name__neregex=r'/blog/2011/1{1,2}?/26/mount_box_net_on_ubuntu/').count(),
+        )
+
+    def test_iregex(self):
+        self.assertEqual(
+            1,
+            ModelPostgreSQLA.objects.filter(name__iregex=r'/Blog/2011/1{1,2}?/26/mount_box_net_on_ubuntu/').count(),
+        )
+        self.assertEqual(
+            8,
+            ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/1{1,2}?/26/mount_box_net_on_ubuntu/').count(),
         )
