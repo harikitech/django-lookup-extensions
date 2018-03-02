@@ -94,5 +94,15 @@ class RegexLookup(AbstractRegexLookup):
 
 
 @Field.register_lookup
+class IRegexLookup(AbstractRegexLookup):
+    lookup_name = 'iregex'
+
+
+@Field.register_lookup
 class NeRegexLookup(AbstractRegexLookup):
     lookup_name = 'neregex'
+
+
+@Field.register_lookup
+class NeIRegexLookup(AbstractRegexLookup):
+    lookup_name = 'neiregex'

@@ -219,19 +219,19 @@ class RegexLookupMySQLTest(TestCase):
         )
         self.assertEqual(
             0,
-            ModelMySQLA.objects.filter(name__regex=r'\<Ankaku').count(),
+            ModelMySQLA.objects.filter(name__iregex=r'\<Ankaku').count(),
         )
         self.assertEqual(
             1,
-            ModelMySQLA.objects.filter(name__regex=r'Hankaku\>').count(),
+            ModelMySQLA.objects.filter(name__iregex=r'Hankaku\>').count(),
         )
         self.assertEqual(
             0,
-            ModelMySQLA.objects.filter(name__regex=r'Hankak\>').count(),
+            ModelMySQLA.objects.filter(name__iregex=r'Hankak\>').count(),
         )
         self.assertEqual(
             1,
-            ModelMySQLA.objects.filter(name__regex=r'i \w').count(),
+            ModelMySQLA.objects.filter(name__iregex=r'i \w').count(),
         )
 
     def test_regex_sql_injection(self):
@@ -642,19 +642,19 @@ class RegexLookupPostgreSQLRedshiftTest(TestCase):
         )
         self.assertEqual(
             0,
-            ModelPostgreSQLA.objects.filter(name__regex=r'\<Ankaku').count(),
+            ModelPostgreSQLA.objects.filter(name__iregex=r'\<Ankaku').count(),
         )
         self.assertEqual(
             1,
-            ModelPostgreSQLA.objects.filter(name__regex=r'Hankaku\>').count(),
+            ModelPostgreSQLA.objects.filter(name__iregex=r'Hankaku\>').count(),
         )
         self.assertEqual(
             0,
-            ModelPostgreSQLA.objects.filter(name__regex=r'Hankak\>').count(),
+            ModelPostgreSQLA.objects.filter(name__iregex=r'Hankak\>').count(),
         )
         self.assertEqual(
             1,
-            ModelPostgreSQLA.objects.filter(name__regex=r'i \w').count(),
+            ModelPostgreSQLA.objects.filter(name__iregex=r'i \w').count(),
         )
 
     def test_regex_sql_injection(self):
