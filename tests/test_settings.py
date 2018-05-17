@@ -1,7 +1,6 @@
 """Django settings for tests."""
 import os
 
-
 SECRET_KEY = 'fake-key'
 INSTALLED_APPS = [
     'lookup_extensions',

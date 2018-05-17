@@ -25,9 +25,9 @@ matrix:
   - python: pypy3
     env: TOX_ENV=pypy3-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_USE_CFFI=yes
   - python: 3.5
-    env: TOX_ENV=py35-djdev TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py35-djmaster TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
   - python: 3.6
-    env: TOX_ENV=py36-djdev TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py36-djmaster TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
   - python: 3.6
     env: TOX_ENV=flake8
   - python: 3.6

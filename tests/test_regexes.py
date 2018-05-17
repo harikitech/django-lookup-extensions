@@ -3,12 +3,8 @@ import unittest
 from django.db import connections
 from django.test import TestCase
 
-from tests.app_mysql.models import (
-    ModelMySQLA,
-)
-from tests.app_postgresql.models import (
-    ModelPostgreSQLA,
-)
+from tests.app_mysql.models import ModelMySQLA
+from tests.app_postgresql.models import ModelPostgreSQLA
 
 
 @unittest.skipUnless(

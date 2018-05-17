@@ -1,6 +1,10 @@
 import unittest
 
-from django.db import connection, connections, router
+from django.db import (
+    connection,
+    connections,
+    router,
+)
 from django.db.models.lookups import (
     Contains,
     EndsWith,
