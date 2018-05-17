@@ -6,7 +6,6 @@ from django.db.models.lookups import (
     Lookup,
 )
 
-
 VENDOR_DIALECT = {
     'mysql': {
         'operators': {
