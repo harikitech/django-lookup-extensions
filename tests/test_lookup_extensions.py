@@ -1224,16 +1224,6 @@ class NeLookupPostgreSQLTest(TestCase):
         self.assertEqual([], ne_lookup_sql[1])
 
 
-import unittest
-
-from django.db import connections
-from django.test import TestCase
-
-from tests.app_default.models import ModelA
-from tests.app_mysql.models import ModelMySQLA
-from tests.app_postgresql.models import ModelPostgreSQLA
-
-
 @unittest.skipUnless(
     ('default' in connections and connections['default'].vendor == 'sqlite'),
     'sqlite tests',
@@ -2028,7 +2018,9 @@ class RegexLookupMySQLTest(TestCase):
         )
         self.assertEqual(
             8,
-            ModelMySQLA.objects.filter(name__neiregex=r'/Blog/2011/11/26/mount_box_ne[[:alnum:]_]{2}on_ubuntu/').count(),
+            ModelMySQLA.objects.filter(
+                name__neiregex=r'/Blog/2011/11/26/mount_box_ne[[:alnum:]_]{2}on_ubuntu/',
+            ).count(),
         )
         self.assertEqual(
             8,
@@ -2559,4 +2551,3 @@ class RegexLookupPostgreSQLTest(TestCase):
             8,
             ModelPostgreSQLA.objects.filter(name__neiregex=r'/Blog/2011/1{1,2}?/26/mount_box_net_on_ubuntu/').count(),
         )
-

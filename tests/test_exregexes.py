@@ -1114,7 +1114,9 @@ class RegexLookupPostgreSQLRedshiftTest(TestCase):
         )
         self.assertEqual(
             8,
-            ModelPostgreSQLA.objects.filter(name__neexregex=r'/blog/2017/05/07/kamakura_golden_(week|monthly)/').count(),
+            ModelPostgreSQLA.objects.filter(
+                name__neexregex=r'/blog/2017/05/07/kamakura_golden_(week|monthly)/',
+            ).count(),
         )
         self.assertEqual(
             8,
@@ -1212,7 +1214,9 @@ class RegexLookupPostgreSQLRedshiftTest(TestCase):
         )
         self.assertEqual(
             8,
-            ModelPostgreSQLA.objects.filter(name__neexiregex=r'/Blog/2017/05/07/kamakura_golden_(week|monthly)/').count(),
+            ModelPostgreSQLA.objects.filter(
+                name__neexiregex=r'/Blog/2017/05/07/kamakura_golden_(week|monthly)/',
+            ).count(),
         )
         self.assertEqual(
             8,
