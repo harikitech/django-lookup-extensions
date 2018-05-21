@@ -51,8 +51,8 @@ VENDOR_SYNONYMS = {
             '\\S': '[^[:space:]]',
     },
     'sqlite': {
-            '\\<': '\\b',  # \\< means `start of word`, \\b means word boundary
-            '\\>': '\\b',  # \\> means `end of word`, \\b means word boundary
+            # '\\<': '\\b',  # \\< means `start of word`, \\b means word boundary
+            # '\\>': '\\b',  # \\> means `end of word`, \\b means word boundary
     },
 }
 for vendor in VENDOR_SYNONYMS.keys():
@@ -85,7 +85,7 @@ class AbstractExRegexLookup(FieldGetDbPrepValueMixin, Lookup):
         return '%s %s' % (lhs_sql, rhs_sql), params
 
     def process_rhs(self, qn, connection):
-        rhs, params = super(AbstractRegexLookup, self).process_rhs(qn, connection)
+        rhs, params = super(AbstractExRegexLookup, self).process_rhs(qn, connection)
         param = params[0]
         if params and not self.bilateral_transforms:
             for expression in VENDOR_SYNONYMS[connection.vendor]['expressions']:
