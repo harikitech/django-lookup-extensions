@@ -199,9 +199,6 @@ class NeRegex(NeLookup):
     lookup_name = 'neregex'
     prepare_rhs = False
 
-    def as_sql(self, compiler, connection):
-        return super(NeRegex, self).as_sql(compiler, connection)
-
 
 @Field.register_lookup
 class NeIRegex(NeRegex):
