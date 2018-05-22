@@ -86,7 +86,7 @@ Use lookup like Django standard lookups.
 Supported lookup types
 ----------------------
 
-neexact is negate exact, others are similar.
+neexact is negate exact, neiexact is negate iexact, others are similar.
 
 - neexact
 - neiexact
@@ -102,9 +102,11 @@ neexact is negate exact, others are similar.
 Extra regex lookup types
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-regex lookups support metacharacters **\\d**, **\\D**, **\w**, **\\W**, **\\s**, **\\S**.
+These regex lookups support metacharacters **\\d**, **\\D**, **\w**, **\\W**, **\\s**, **\\S**.
 
 MySQL, PostgreSQL and Redshift also support **\\<**, **\\>**.
+
+Prefix follows the previous section.
 
 - exregex
 - exiregex
