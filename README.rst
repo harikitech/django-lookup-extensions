@@ -29,7 +29,7 @@ Django lookup extensions
     :target: https://pyup.io/repos/github/uncovertruth/django-lookup-extensions/
     :alt: Python 3
 
-.. .. image:: https://img.shields.io/pypi/v/django-lookup-extensions.svg
+.. image:: https://img.shields.io/pypi/v/django-lookup-extensions.svg
     :target: https://pypi.org/project/django-lookup-extensions
 
 Django lookup extensions use **NOT** query.
