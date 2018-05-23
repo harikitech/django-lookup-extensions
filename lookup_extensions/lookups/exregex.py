@@ -9,18 +9,26 @@ from django.db.models.lookups import (
 VENDOR_DIALECT = {
     'mysql': {
         'operators': {
-            'regex': 'REGEXP BINARY %s',
-            'iregex': 'REGEXP %s',
-            'neregex': 'NOT REGEXP BINARY %s',
-            'neiregex': 'NOT REGEXP %s',
+            'exregex': 'REGEXP BINARY %s',
+            'exiregex': 'REGEXP %s',
+            'neexregex': 'NOT REGEXP BINARY %s',
+            'neexiregex': 'NOT REGEXP %s',
         },
     },
     'postgresql': {
         'operators': {
-            'regex': '~ %s',
-            'iregex': '~* %s',
-            'neregex': '!~ %s',
-            'neiregex': '!~* %s',
+            'exregex': '~ %s',
+            'exiregex': '~* %s',
+            'neexregex': '!~ %s',
+            'neexiregex': '!~* %s',
+        },
+    },
+    'sqlite': {
+        'operators': {
+            'exregex': 'REGEXP %s',
+            'exiregex': "REGEXP '(?i)' || %s",
+            'neexregex': 'NOT REGEXP %s',
+            'neexiregex': "NOT REGEXP '(?i)' || %s",
         },
     },
 }
@@ -42,6 +50,10 @@ VENDOR_SYNONYMS = {
             '\\s': '[[:space:]]',
             '\\S': '[^[:space:]]',
     },
+    'sqlite': {
+            # '\\<': '\\b',  # \\< means `start of word`, \\b means word boundary
+            # '\\>': '\\b',  # \\> means `end of word`, \\b means word boundary
+    },
 }
 for vendor in VENDOR_SYNONYMS.keys():
     expressions = []
@@ -52,12 +64,12 @@ for vendor in VENDOR_SYNONYMS.keys():
 VENDOR_SYNONYMS['redshift'] = VENDOR_SYNONYMS['postgresql']
 
 
-class AbstractRegexLookup(FieldGetDbPrepValueMixin, Lookup):
+class AbstractExRegexLookup(FieldGetDbPrepValueMixin, Lookup):
     def lookup_operator(self):
         raise NotImplementedError()
 
     def process_lhs(self, compiler, connection, lhs=None):
-        lhs_sql, params = super(AbstractRegexLookup, self).process_lhs(
+        lhs_sql, params = super(AbstractExRegexLookup, self).process_lhs(
             compiler,
             connection,
             lhs,
@@ -73,7 +85,7 @@ class AbstractRegexLookup(FieldGetDbPrepValueMixin, Lookup):
         return '%s %s' % (lhs_sql, rhs_sql), params
 
     def process_rhs(self, qn, connection):
-        rhs, params = super(AbstractRegexLookup, self).process_rhs(qn, connection)
+        rhs, params = super(AbstractExRegexLookup, self).process_rhs(qn, connection)
         param = params[0]
         if params and not self.bilateral_transforms:
             for expression in VENDOR_SYNONYMS[connection.vendor]['expressions']:
@@ -89,20 +101,20 @@ class AbstractRegexLookup(FieldGetDbPrepValueMixin, Lookup):
 
 
 @Field.register_lookup
-class RegexLookup(AbstractRegexLookup):
-    lookup_name = 'regex'
+class ExRegexLookup(AbstractExRegexLookup):
+    lookup_name = 'exregex'
 
 
 @Field.register_lookup
-class IRegexLookup(AbstractRegexLookup):
-    lookup_name = 'iregex'
+class ExIRegexLookup(AbstractExRegexLookup):
+    lookup_name = 'exiregex'
 
 
 @Field.register_lookup
-class NeRegexLookup(AbstractRegexLookup):
-    lookup_name = 'neregex'
+class NeExRegexLookup(AbstractExRegexLookup):
+    lookup_name = 'neexregex'
 
 
 @Field.register_lookup
-class NeIRegexLookup(AbstractRegexLookup):
-    lookup_name = 'neiregex'
+class NeExIRegexLookup(AbstractExRegexLookup):
+    lookup_name = 'neexiregex'

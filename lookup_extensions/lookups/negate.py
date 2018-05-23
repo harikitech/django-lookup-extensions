@@ -17,6 +17,8 @@ VENDOR_DIALECT = {
             'neendswith': 'NOT LIKE BINARY %s',
             'neistartswith': 'NOT LIKE %s',
             'neiendswith': 'NOT LIKE %s',
+            'neregex': 'NOT REGEXP BINARY %s',
+            'neiregex': 'NOT REGEXP %s',
         },
         'pattern_ops': {
             'necontains': "NOT LIKE BINARY CONCAT('%%', {}, '%%')",  # noqa P103
@@ -37,6 +39,8 @@ VENDOR_DIALECT = {
             'neendswith': 'NOT LIKE %s',
             'neistartswith': 'NOT LIKE UPPER(%s)',
             'neiendswith': 'NOT LIKE UPPER(%s)',
+            'neregex': '!~ %s',
+            'neiregex': '!~* %s',
         },
         'pattern_ops': {
             'necontains': "NOT LIKE '%%' || {} || '%%'",  # noqa P103
@@ -57,6 +61,8 @@ VENDOR_DIALECT = {
             'neendswith': "NOT LIKE %s ESCAPE '\\'",
             'neistartswith': "NOT LIKE %s ESCAPE '\\'",
             'neiendswith': "NOT LIKE %s ESCAPE '\\'",
+            'neregex': 'NOT REGEXP %s',
+            'neiregex': "NOT REGEXP '(?i)' || %s",
         },
         'pattern_ops': {
             'necontains': r"NOT LIKE '%%' || {} || '%%' ESCAPE '\'",  # noqa P103
@@ -186,3 +192,14 @@ class NeIEndsWith(NePatternLookup):
         if params and not self.bilateral_transforms:
             params[0] = "%%%s" % connection.ops.prep_for_like_query(params[0])
         return rhs, params
+
+
+@Field.register_lookup
+class NeRegex(NeLookup):
+    lookup_name = 'neregex'
+    prepare_rhs = False
+
+
+@Field.register_lookup
+class NeIRegex(NeRegex):
+    lookup_name = 'neiregex'
