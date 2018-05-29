@@ -37,8 +37,8 @@ matrix:
   - python: 3.6
     env: TOX_ENV=check-manifest
 services:
-  - postgresql
-  - mysql
+- postgresql
+- mysql
 install:
 - pip install -U pip setuptools tox wheel
 script:
@@ -52,6 +52,8 @@ deploy:
   on:
     tags: true
     repo: uncovertruth/django-lookup-extensions
-    condition: $TOX_ENV = py36-dj20
+    condition: "$TOX_ENV = py36-dj20"
 notifications:
   email: false
+  slack:
+    secure: TIsvLLUrNvhB8tgq+eARcOBs3XOTdazI7r1rqr9PwC8YbGvKMSjk1ukhY8Vxfte6OrwTqyqDUG6lvwTqO4lpzEZgdd666XsLuWXS7uAAoRu0T62re60HIfvdmUy3zW2/E6djGCL22SxHmk6MUZqo7Z7FNW3biEOmyiVXY3jFym6iJdJSmWnGQCRDACoymyNlDrnTkNOHXwpZFPv7WIe2ZzGXbQcAxNpcvkgBwjBhW34EZXuRI8X09CH+EStz/GTW5ZGLrJ2vxm/zHwvJhIg6pmruGIMdLHE9HNqfRe+bG75afPzEjM3mXQNjYEvhwJR0rATGcsI2sdP0vSuyamtiVIY5a56TcIIS5G7+qXX6u5TGRw81LLCF+lBr5i6rizPQMkBkksTwFhwSQ4ouRebaSygGYh0W48pd7YX8PQYy6+WyoGk/0wUcTNnUL1vra4WsUGY+Weixjug31GbcveHuRXXgy/zAFqkQcv6SpiEFawhdVmEwWbX2sPaEtoI/pCMD7dcIVfB1EBEu1zDcyPj9geMjHszd3cSoWzk35kpfiMMeyASkJv0uLUQeHamghxQqP2XrxpJOa3IACK/dQwmAaIiS+yRESL+PI7uTgPMt/dtSyFwc5vNSSBgmPVxU8aIrksaAkx0DfYY3f3qRhW7VPTCnRoCGul9udA6DbUR4nLs=
