@@ -7,8 +7,7 @@ matrix:
   - python: 2.7
     env: TOX_ENV=py27-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes
   - python: pypy
-    env: TOX_ENV=pypy-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes
-      TOX_TEST_USE_CFFI=yes
+    env: TOX_ENV=pypy-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes TOX_TEST_USE_CFFI=yes
   - python: 3.4
     env: TOX_ENV=py34-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
   - python: 3.5
@@ -16,8 +15,7 @@ matrix:
   - python: 3.6
     env: TOX_ENV=py36-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
   - python: pypy3
-    env: TOX_ENV=pypy3-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
-      TOX_TEST_USE_CFFI=yes
+    env: TOX_ENV=pypy3-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_USE_CFFI=yes
   - python: 3.4
     env: TOX_ENV=py34-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
   - python: 3.5
