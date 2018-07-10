@@ -1,33 +1,41 @@
 sudo: false
 language: python
 cache: pip
+services:
+- postgresql
+- mysql
+env:
+  global:
+  - secure: "oH1YYII+BZETVGJRzsQ0+KFHfhgkwWp92q1BoXthWIjgteiwLF6vtjvHy2m4a/wNfbIWleJ3a9ogdzJF1KGmDAQX4OCns3GwibgZtVThh2FieOgp/7/DXxCxX4magWfzUVWzRQ5PxINOlrodzD4qbJdHrzEyNY+K4hF1bqNzDtbrsHGYa0miFeDCddEdcYF73xoZtqZtp/iu3p4JeF7TW5e69ruh25NAFyg/+YpZYhShns7Fo5DKyLQTBSEp9rHRHMApBRqPUYXWpBc948Pl4HWeU6Zgxg9pvupKwYA+O/3tYUiPOSriKoIVN8pY66UAaUZuR4ZDyrLA51rbmk0/Aa7rOk7E1eUolgsMX4IkX7hAihxHxDGf/LUl+V1IO/q6tCFK45L+Q6dCciIFS7W7Mvi32dtwijD2bsVBBbTPLdlEHR5xpe91jrMZ9erAZ+2sQoQoaiQJcm1wB7wCIU+oRebB7aDqYU0KGErryGtJwCKFEtwVyg+p8c3UHNWVc71lKpJnDQ8opaJ39gc3pTcSFQ6AWXP7atVRihZ3HFGtMs094Fj1UG5yQ5lfdU9ihcuBHBnyGDBaPsFVEXLrCATpfxl7JAr6rRQBzIPtWxsc3y01/iCQB3oVtOeEI/8oXwtJmHF80lPjhkYIw5bFSSzR6HnXnEgnOuwHB+UnNY6Qbwc="
+  - TEST_WITH_MYSQL=yes
+  - TEST_WITH_POSTGRESQL=yes
 matrix:
   fast_finish: true
   include:
   - python: 2.7
-    env: TOX_ENV=py27-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes
+    env: TOX_ENV=py27-dj111 TEST_WITH_OLD_SQLITE=yes
   - python: pypy
-    env: TOX_ENV=pypy-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_WITH_OLD_SQLITE=yes TOX_TEST_USE_CFFI=yes
+    env: TOX_ENV=pypy-dj111 TEST_WITH_OLD_SQLITE=yes TEST_USE_CFFI=yes
   - python: 3.4
-    env: TOX_ENV=py34-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py34-dj111
   - python: 3.5
-    env: TOX_ENV=py35-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py35-dj111
   - python: 3.6
-    env: TOX_ENV=py36-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py36-dj111
   - python: pypy3
-    env: TOX_ENV=pypy3-dj111 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_USE_CFFI=yes
+    env: TOX_ENV=pypy3-dj111 TEST_USE_CFFI=yes
   - python: 3.4
-    env: TOX_ENV=py34-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py34-dj20
   - python: 3.5
-    env: TOX_ENV=py35-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py35-dj20
   - python: 3.6
-    env: TOX_ENV=py36-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py36-dj20
   - python: pypy3
-    env: TOX_ENV=pypy3-dj20 TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes TOX_TEST_USE_CFFI=yes
+    env: TOX_ENV=pypy3-dj20 TEST_USE_CFFI=yes
   - python: 3.5
-    env: TOX_ENV=py35-djmaster TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py35-djmaster
   - python: 3.6
-    env: TOX_ENV=py36-djmaster TOX_TEST_WITH_MYSQL=yes TOX_TEST_WITH_POSTGRESQL=yes
+    env: TOX_ENV=py36-djmaster
   - python: 3.6
     env: TOX_ENV=flake8
   - python: 3.6
@@ -36,9 +44,6 @@ matrix:
     env: TOX_ENV=readme
   - python: 3.6
     env: TOX_ENV=check-manifest
-services:
-- postgresql
-- mysql
 install:
 - pip install -U pip setuptools tox wheel
 script:
@@ -48,7 +53,7 @@ deploy:
   distributions: sdist bdist_wheel
   user: uncovertruth
   password:
-    secure: PLEASE_REPLACE_ME
+    secure: hB8YrbE+U1XPjeDd0UA5c00nW6/g9nhEJzswYvYqwcIWkvMXx8m79r1ZokdNeqr5eimx2FLdbstf99ciWSrpHZkIFDQF+9wXkirGQVwIBZZuRTWOiebxGTsm8IlxLe8+WcxCbbnzhksX6FD0jxyVi0bGlTZX2Oog/55FqsWBSNEzgVfsed1zp0SCKHGCwQ2pun9i5UNu+uZl1vVbeXk4CQsazkAsVn0yh//FFnu7PrEKKBxvlwU6AHePnYZYHGgV1Kd7IS1erlv4jT8g15hFUgX4TrlAZpPg8hUe5/EINi6yN12NhP/VSlFQLUhMArOyqmQF2LVCvoHaQhhLpKUJs9A+407Jp7sVNOLNpalh8/KJx8ZMXQGJiInD6pNS1oRBw8jyG61XQiHvzexSaRZz/hHirX3ivERMg0eQyBkDUgXI+YXGqrIN/HKbO9wpIW7RJ8dtJmK/O1LvB3R0fbCU6irciueu+4uLrTnrbfB/T5ZcjFZMXe9ybC5mxbhZe4tHuzMbFZRknIvMmgkRQyyhTMrjddJAfXSQoWZBNjKW7J+/pTxKsskfdewpJrT8uose6d4KIbubSo2TLpvbPtj3PyAw3CfRRfT0ZAvekIhuf9xeovVdFvTyoRKHsPuokBCZNqzPKAuxBzORrpwHAb/ViXSVfSg8vY7dWAy4i1OKblc=
   on:
     tags: true
     repo: uncovertruth/django-lookup-extensions
