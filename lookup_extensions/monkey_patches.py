@@ -1,9 +1,12 @@
 from django.db import utils
 
 from .backends.mixins import ExtendedDatabaseOperationsMixin
-from .backends.mysql import ExtendedDatabaseWrapper as MySQLExtendedDatabaseWrapper
-from .backends.postgresql import ExtendedDatabaseWrapper as PostgreSQLExtendedDatabaseWrapper
-from .backends.sqlite3 import ExtendedDatabaseWrapper as SQLite3ExtendedDatabaseWrapper
+from .backends.mysql import \
+    ExtendedDatabaseWrapper as MySQLExtendedDatabaseWrapper
+from .backends.postgresql import \
+    ExtendedDatabaseWrapper as PostgreSQLExtendedDatabaseWrapper
+from .backends.sqlite3 import \
+    ExtendedDatabaseWrapper as SQLite3ExtendedDatabaseWrapper
 
 
 def patche_ops_class(original_ops_class):
