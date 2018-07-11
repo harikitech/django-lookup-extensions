@@ -23,7 +23,7 @@ def patch_operators(original_database_wrapper_class):
 
     if original_database_wrapper_class.vendor == 'mysql':
         _extend_wrapper(MySQLExtendedDatabaseWrapper)
-    elif original_database_wrapper_class.vendor in ['postgres', 'redshift']:
+    elif original_database_wrapper_class.vendor in ['postgresql', 'redshift']:
         _extend_wrapper(PostgreSQLExtendedDatabaseWrapper)
     elif original_database_wrapper_class.vendor == 'sqlite':
         _extend_wrapper(SQLite3ExtendedDatabaseWrapper)
