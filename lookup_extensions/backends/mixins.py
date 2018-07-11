@@ -18,5 +18,7 @@ class ExtendedDatabaseOperationsMixin(object):
     def lookup_cast(self, lookup_type, internal_type=None):
         regular_lookup_type = self.convert_to_regular_lookup_type(lookup_type)
         if regular_lookup_type:
-            return super(ExtendedDatabaseOperationsMixin, self).lookup_cast(regular_lookup_type, internal_type=internal_type)
-        return super(ExtendedDatabaseOperationsMixin, self).lookup_cast(lookup_type, internal_type=internal_type)
+            return super(ExtendedDatabaseOperationsMixin, self).lookup_cast(
+                regular_lookup_type, internal_type=internal_type)
+        return super(ExtendedDatabaseOperationsMixin, self).lookup_cast(
+            lookup_type, internal_type=internal_type)
