@@ -1,5 +1,6 @@
 class ExtendedDatabaseWrapper(object):
     operators = {
+        # For negates
         'neexact': '<> %s',
         'neiexact': '<> UPPER(%s)',
         'necontains': 'NOT LIKE %s',
@@ -10,6 +11,11 @@ class ExtendedDatabaseWrapper(object):
         'neendswith': 'NOT LIKE %s',
         'neistartswith': 'NOT LIKE UPPER(%s)',
         'neiendswith': 'NOT LIKE UPPER(%s)',
+        # For exregex
+        'exregex': '~ %s',
+        'exiregex': '~* %s',
+        'neexregex': '!~ %s',
+        'neexiregex': '!~* %s',
     }
 
     pattern_ops = {
@@ -19,4 +25,9 @@ class ExtendedDatabaseWrapper(object):
        'neistartswith': r"NOT LIKE UPPER({}) || '%%'",
        'neendswith': r"NOT LIKE '%%' || {}",
        'neiendswith': r"NOT LIKE '%%' || UPPER({})",
+    }
+
+    regex_synonyms = {
+        '\\<': '[[:<:]]',
+        '\\>': '[[:>:]]',
     }

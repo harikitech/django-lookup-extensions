@@ -19,6 +19,7 @@ def patch_operators(original_database_wrapper_class):
     def _extend_wrapper(extended_wrapper_class):
         original_database_wrapper_class.operators.update(extended_wrapper_class.operators)
         original_database_wrapper_class.pattern_ops.update(extended_wrapper_class.pattern_ops)
+        original_database_wrapper_class.regex_synonyms = extended_wrapper_class.regex_synonyms
 
     if original_database_wrapper_class.vendor == 'mysql':
         _extend_wrapper(MySQLExtendedDatabaseWrapper)

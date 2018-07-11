@@ -1,5 +1,6 @@
 class ExtendedDatabaseWrapper(object):
     operators = {
+        # For negates
         'neexact': '<> %s',
         'neiexact': 'NOT LIKE %s',
         'necontains': 'NOT LIKE BINARY %s',
@@ -10,6 +11,11 @@ class ExtendedDatabaseWrapper(object):
         'neendswith': 'NOT LIKE BINARY %s',
         'neistartswith': 'NOT LIKE %s',
         'neiendswith': 'NOT LIKE %s',
+        # For exregex
+        'exregex': 'REGEXP BINARY %s',
+        'exiregex': 'REGEXP %s',
+        'neexregex': 'NOT REGEXP BINARY %s',
+        'neexiregex': 'NOT REGEXP %s',
     }
 
     pattern_ops = {
@@ -19,4 +25,15 @@ class ExtendedDatabaseWrapper(object):
         'neistartswith': "NOT LIKE CONCAT({}, '%%')",
         'neendswith': "NOT LIKE BINARY CONCAT('%%', {})",
         'neiendswith': "NOT LIKE CONCAT('%%', {})",
+    }
+
+    regex_synonyms = {
+        '\\<': '[[:<:]]',
+        '\\>': '[[:>:]]',
+        '\\d': '[[:digit:]]',
+        '\\D': '[^[:digit:]]',
+        '\\w': '[[:alnum:]_]',
+        '\\W': '[^[:alnum:]_]',
+        '\\s': '[[:space:]]',
+        '\\S': '[^[:space:]]',
     }
