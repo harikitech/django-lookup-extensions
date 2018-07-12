@@ -9,7 +9,7 @@ from .backends.sqlite3 import \
     ExtendedDatabaseWrapper as SQLite3ExtendedDatabaseWrapper
 
 
-def patche_ops_class(original_ops_class):
+def patch_operations_class(original_ops_class):
     if issubclass(original_ops_class, ExtendedDatabaseOperationsMixin):
         return original_ops_class
 
@@ -18,7 +18,7 @@ def patche_ops_class(original_ops_class):
     return DatabaseOperations
 
 
-def patch_operators(original_database_wrapper_class):
+def patch_wrapper_class(original_database_wrapper_class):
     def _extend_wrapper(extended_wrapper_class):
         original_database_wrapper_class.operators.update(extended_wrapper_class.operators)
         original_database_wrapper_class.pattern_ops.update(extended_wrapper_class.pattern_ops)
@@ -36,8 +36,8 @@ def patch_operators(original_database_wrapper_class):
 def patch_load_backend():
     def load_backend(backend_name):
         backend = original_load_backend(backend_name)
-        backend.DatabaseWrapper.ops_class = patche_ops_class(backend.DatabaseWrapper.ops_class)
-        backend.DatabaseWrapper = patch_operators(backend.DatabaseWrapper)
+        backend.DatabaseWrapper.ops_class = patch_operations_class(backend.DatabaseWrapper.ops_class)
+        backend.DatabaseWrapper = patch_wrapper_class(backend.DatabaseWrapper)
         return backend
 
     original_load_backend = utils.load_backend
