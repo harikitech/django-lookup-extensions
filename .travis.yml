@@ -101,61 +101,61 @@ matrix:
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=pypy-dj111 DATABASE_URL=mysql://root@localhost/test_db
     python: pypy
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=py34-dj111 DATABASE_URL=mysql://root@localhost/test_db
     python: 3.4
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=py35-dj111 DATABASE_URL=mysql://root@localhost/test_db
     python: 3.5
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=py36-dj111 DATABASE_URL=mysql://root@localhost/test_db
     python: 3.6
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=pypy3-dj111 DATABASE_URL=mysql://root@localhost/test_db
     python: pypy3
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=py34-dj20 DATABASE_URL=mysql://root@localhost/test_db
     python: 3.4
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=py35-dj20 DATABASE_URL=mysql://root@localhost/test_db
     python: 3.5
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=py36-dj20 DATABASE_URL=mysql://root@localhost/test_db
     python: 3.6
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
   - env: TOX_ENV=pypy3-dj20 DATABASE_URL=mysql://root@localhost/test_db
     python: pypy3
     services:
     - mysql
     before_script:
-    - mysql -e 'CREATE DATABASE test_db;' -u root
+    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4;' -u root
 
   - env: TOX_ENV=flake8
     python: 3.6
