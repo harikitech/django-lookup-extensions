@@ -24,6 +24,8 @@ def runtests():
     test_runner = TestRunner(
         verbosity=2,
         interactive=False,
+        keepdb=True,
+        debug_sql=True,
     )
     if os.environ.get('TEST_WITH_REDSHIFT', None) == 'yes':
         test_runner.keepdb = True
