@@ -4,9 +4,8 @@ import logging
 import os
 
 import django
-
-from six.moves.urllib import request
-from six.moves.urllib.error import HTTPError
+from django.utils.six.moves.urllib import request
+from django.utils.six.moves.urllib.error import HTTPError
 
 logger = logging.getLogger()
 
