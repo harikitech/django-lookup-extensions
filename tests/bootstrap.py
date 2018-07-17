@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 
 import os
-import urllib.request
 import django
+import logging
+
+from six.moves.urllib import request
+from six.moves.urllib.error import HTTPError
+
+
+logger = logging.getLogger()
 
 
 DJANGO_VERSION = django.get_version()
@@ -44,7 +50,10 @@ def download_django_test_apps():
             test_file,
         )
         if not os.path.isfile(to_file):
-            urllib.request.urlretrieve(download_url, to_file)
+            try:
+                request.urlretrieve(download_url, to_file)
+            except HTTPError:
+                logger.warn("Not found: %s", download_url)
 
     for test_app, test_files in DJANGO_LOOKUP_TEST_APP_FILES.items():
         _download_file(test_app, '__init__.py')
