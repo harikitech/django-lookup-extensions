@@ -535,3 +535,38 @@ class LookupTests(DjangoLookupTests):
         """
         season = Season.objects.create(year=2012, nulled_text_field=None)
         self.assertTrue(Season.objects.filter(pk=season.pk, nulled_text_field__neisnull=True))
+
+    def test_exregex(self):
+        for a in Article.objects.all():
+            a.delete()
+        now = datetime.now()
+        Article.objects.create(pub_date=now, headline='<f')
+        Article.objects.create(pub_date=now, headline='<fo')
+        Article.objects.create(pub_date=now, headline='<foo')
+        Article.objects.create(pub_date=now, headline='<fooo')
+        Article.objects.create(pub_date=now, headline='<hey-Foo')
+        Article.objects.create(pub_date=now, headline='<bar')
+        Article.objects.create(pub_date=now, headline='<AbBa')
+        Article.objects.create(pub_date=now, headline='<baz')
+        Article.objects.create(pub_date=now, headline='<baxZ')
+
+        # zero-or-more
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__regex=r'\<fo*'),
+            [
+                '<Article: <f>',
+                '<Article: <fo>',
+                '<Article: <foo>',
+                '<Article: <fooo>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__iregex=r'fo*'),
+            [
+                '<Article: <f>',
+                '<Article: <fo>',
+                '<Article: <foo>',
+                '<Article: <fooo>',
+                '<Article: <hey-Foo>',
+            ],
+        )
