@@ -6,16 +6,16 @@ from django.core.exceptions import FieldError
 from django.test import skipUnlessDBFeature
 
 try:
+    from lookup.models import (
+        Article,
+        Game,
+        Player,
+        Season,
+    )
     from lookup.tests import LookupTests as DjangoLookupTests
 except ImportError:
     import sys
     sys.exit("Run tests/bootstrap.py before run tests.")
-from lookup.models import (
-    Article,
-    Game,
-    Player,
-    Season,
-)
 
 
 class LookupTests(DjangoLookupTests):

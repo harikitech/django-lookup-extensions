@@ -1,7 +1,7 @@
 from django.core.exceptions import FieldError
 
-from reverse_lookup.models import Poll, User
 try:
+    from reverse_lookup.models import Poll, User
     from reverse_lookup.tests import ReverseLookupTests as DjangoReverseLookupTests
 except ImportError:
     import sys

@@ -11,6 +11,8 @@ logger = logging.getLogger()
 
 
 DJANGO_VERSION = django.get_version()
+if 'dev' in DJANGO_VERSION:
+    DJANGO_VERSION = 'master'
 DJANGO_TEST_APP_PATH = os.path.join(
     os.path.dirname(__file__),
     'vendor',
