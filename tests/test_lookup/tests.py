@@ -17,6 +17,8 @@ except ImportError:
     print("Run tests/bootstrap.py before run tests.")
     raise
 
+from utils import skipIfDBVendor
+
 
 class LookupTests(DjangoLookupTests):
     def test_negate_lookup_int_as_str(self):
@@ -449,13 +451,22 @@ class LookupTests(DjangoLookupTests):
             ],
         )
 
-    def test_negate_regex_null(self):
+    @skipIfDBVendor('postgresql', 'mysql')
+    def test_negate_regex_null_sqlite(self):
         Season.objects.create(year=2012, gt=None)
         self.assertQuerysetEqual(
             Season.objects.filter(gt__neregex=r'^$'),
             [
                 '<Season: 2012>',
             ],
+        )
+
+    @skipIfDBVendor('sqlite')
+    def test_negate_regex_null_without_sqlite(self):
+        Season.objects.create(year=2012, gt=None)
+        self.assertQuerysetEqual(
+            Season.objects.filter(gt__neregex=r'^$'),
+            [],
         )
 
     def test_negate_regex_non_string(self):
