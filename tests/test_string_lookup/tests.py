@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 try:
     from string_lookup.models import Article, Foo
     from string_lookup.tests import StringLookupTests as DjangoStringLookupTests

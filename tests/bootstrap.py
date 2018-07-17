@@ -52,7 +52,10 @@ def download_django_test_apps():
         )
         if not os.path.isfile(to_file):
             try:
-                request.urlretrieve(download_url, to_file)
+                with request.urlopen(download_url) as res:
+                    with open(to_file, 'w') as fp:
+                        fp.write(res.read().decode("utf_8"))
+                        logger.info("Download: %s", download_url)
             except HTTPError:
                 logger.warn("Not found: %s", download_url)
 
