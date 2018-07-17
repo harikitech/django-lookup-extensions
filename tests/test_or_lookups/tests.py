@@ -7,8 +7,8 @@ try:
     from or_lookups.models import Article
     from or_lookups.tests import OrLookupsTests as DjangoOrLookupsTests
 except ImportError:
-    import sys
-    sys.exit("Run tests/bootstrap.py before run tests.")
+    print("Run tests/bootstrap.py before run tests.")
+    raise
 
 
 class OrLookupsTests(DjangoOrLookupsTests):

@@ -14,8 +14,8 @@ try:
     )
     from lookup.tests import LookupTests as DjangoLookupTests
 except ImportError:
-    import sys
-    sys.exit("Run tests/bootstrap.py before run tests.")
+    print("Run tests/bootstrap.py before run tests.")
+    raise
 
 
 class LookupTests(DjangoLookupTests):

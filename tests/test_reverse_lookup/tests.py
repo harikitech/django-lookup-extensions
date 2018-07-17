@@ -4,8 +4,8 @@ try:
     from reverse_lookup.models import Poll, User
     from reverse_lookup.tests import ReverseLookupTests as DjangoReverseLookupTests
 except ImportError:
-    import sys
-    sys.exit("Run tests/bootstrap.py before run tests.")
+    print("Run tests/bootstrap.py before run tests.")
+    raise
 
 
 class ReverseLookupTests(DjangoReverseLookupTests):

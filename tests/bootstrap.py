@@ -52,9 +52,9 @@ def download_django_test_apps():
         )
         if not os.path.isfile(to_file):
             try:
-                with open(to_file, 'w') as fp:
+                with open(to_file, 'wb') as fp:
                     res = request.urlopen(download_url)
-                    fp.write(res.read().decode("utf_8"))
+                    fp.write(res.read())
                     logger.info("Download: %s", download_url)
                     res.close()
             except HTTPError:

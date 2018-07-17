@@ -4,8 +4,7 @@ try:
     from string_lookup.models import Article, Foo
     from string_lookup.tests import StringLookupTests as DjangoStringLookupTests
 except ImportError:
-    import sys
-    sys.exit("Run tests/bootstrap.py before run tests.")
+    raise
 
 
 class StringLookupTests(DjangoStringLookupTests):
