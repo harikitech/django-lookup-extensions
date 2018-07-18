@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.db.models.fields import Field
 from django.db.models.lookups import Regex
 
