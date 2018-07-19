@@ -1036,10 +1036,10 @@ class LookupTests(DjangoLookupTests):
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__exiregex=r'\<bar\>'),
+            Article.objects.filter(headline__exiregex=r'\<bar\>').order_by('id'),
             [
-                '<Article: Foo Bar Baz>',
                 '<Article: foo bar baz>',
+                '<Article: Foo Bar Baz>',
             ],
         )
 
@@ -1056,38 +1056,28 @@ class LookupTests(DjangoLookupTests):
 
         # [[:<:]] [[:>:]]
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__neexregex=r'\<Bar\>'),
+            Article.objects.filter(headline__neexregex=r'\<Bar\>')
+                           .exclude(headline__exregex=r'\<Article\>')
+                           .order_by('id'),
             [
+                '<Article: foobarbaz>',
+                '<Article: foo barbaz>',
                 '<Article: Foo Barbaz>',
+                '<Article: foobar baz>',
                 '<Article: FooBar baz>',
                 '<Article: foo bar baz>',
-                '<Article: foo barbaz>',
-                '<Article: foobar baz>',
-                '<Article: foobarbaz>',
-                '<Article: Article 5>',
-                '<Article: Article 6>',
-                '<Article: Article 4>',
-                '<Article: Article 2>',
-                '<Article: Article 3>',
-                '<Article: Article 7>',
-                '<Article: Article 1>',
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__neexiregex=r'\<bar\>'),
+            Article.objects.filter(headline__neexiregex=r'\<bar\>')
+                           .exclude(headline__exregex=r'\<Article\>')
+                           .order_by('id'),
             [
-                '<Article: Foo Barbaz>',
-                '<Article: FooBar baz>',
-                '<Article: foo barbaz>',
-                '<Article: foobar baz>',
                 '<Article: foobarbaz>',
-                '<Article: Article 5>',
-                '<Article: Article 6>',
-                '<Article: Article 4>',
-                '<Article: Article 2>',
-                '<Article: Article 3>',
-                '<Article: Article 7>',
-                '<Article: Article 1>',
+                '<Article: foo barbaz>',
+                '<Article: Foo Barbaz>',
+                '<Article: foobar baz>',
+                '<Article: FooBar baz>',
             ]
         )
 
