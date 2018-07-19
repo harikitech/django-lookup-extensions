@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 try:
     from lookup.test_timefield import TimeFieldLookupTests as DjangoTimeFieldLookupTests
 except ImportError:

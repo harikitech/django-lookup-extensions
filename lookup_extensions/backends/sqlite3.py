@@ -27,7 +27,4 @@ class ExtendedDatabaseWrapper(object):
         'neiendswith': r"NOT LIKE '%%' || UPPER({}) ESCAPE '\'",
     }
 
-    regex_synonyms = {
-        # '\\<': '\\b',  # \\< means `start of word`, \\b means word boundary
-        # '\\>': '\\b',  # \\> means `end of word`, \\b means word boundary
-    }
+    regex_synonyms = {}
