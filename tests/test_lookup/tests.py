@@ -1018,7 +1018,7 @@ class LookupTests(DjangoLookupTests):
             Player.objects.get(name__neexregex='\u2660')
 
     @skipIfDBVendor('sqlite')
-    def test_exregex_brackets(self):
+    def test_exregex_word_starts_or_ends_brackets(self):
         now = datetime.now()
         Article.objects.create(pub_date=now, headline='foobarbaz')
         Article.objects.create(pub_date=now, headline='foo barbaz')
@@ -1044,7 +1044,7 @@ class LookupTests(DjangoLookupTests):
         )
 
     @skipIfDBVendor('sqlite')
-    def test_negate_exregex_brackets(self):
+    def test_negate_exregex_word_starts_or_ends_brackets(self):
         now = datetime.now()
         Article.objects.create(pub_date=now, headline='foobarbaz')
         Article.objects.create(pub_date=now, headline='foo barbaz')
@@ -1058,10 +1058,10 @@ class LookupTests(DjangoLookupTests):
         self.assertQuerysetEqual(
             Article.objects.filter(headline__neexregex=r'\<Bar\>'),
             [
-                '<Article: foobarbaz>',
+                '<Article: foo bar baz>',
                 '<Article: foo barbaz>',
                 '<Article: foobar baz>',
-                '<Article: foo bar baz>',
+                '<Article: foobarbaz>',
                 '<Article: Foo Barbaz>',
                 '<Article: FooBar baz>',
                 '<Article: Article 5>',
@@ -1076,9 +1076,9 @@ class LookupTests(DjangoLookupTests):
         self.assertQuerysetEqual(
             Article.objects.filter(headline__neexiregex=r'\<bar\>'),
             [
-                '<Article: foobarbaz>',
                 '<Article: foo barbaz>',
                 '<Article: foobar baz>',
+                '<Article: foobarbaz>',
                 '<Article: Foo Barbaz>',
                 '<Article: FooBar baz>',
                 '<Article: Article 5>',
@@ -1088,5 +1088,87 @@ class LookupTests(DjangoLookupTests):
                 '<Article: Article 3>',
                 '<Article: Article 7>',
                 '<Article: Article 1>'
+            ],
+        )
+
+    def test_exregex_short_end_escapes(self):
+        now = datetime.now()
+        Article.objects.create(pub_date=now, headline='foobarbaz')
+
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__exregex='\w+\s\d'),
+            [
+                '<Article: Article 5>',
+                '<Article: Article 6>',
+                '<Article: Article 4>',
+                '<Article: Article 2>',
+                '<Article: Article 3>',
+                '<Article: Article 7>',
+                '<Article: Article 1>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__exregex='\W'),
+            [
+                '<Article: Article 5>',
+                '<Article: Article 6>',
+                '<Article: Article 4>',
+                '<Article: Article 2>',
+                '<Article: Article 3>',
+                '<Article: Article 7>',
+                '<Article: Article 1>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__exregex='^\D+$'),
+            [
+                '<Article: foobarbaz>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__exregex='^\S+$'),
+            [
+                '<Article: foobarbaz>',
+            ],
+        )
+
+    def test_negate_exregex_short_end_escapes(self):
+        now = datetime.now()
+        Article.objects.create(pub_date=now, headline='foobarbaz')
+
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__neexregex='\w+\s\d'),
+            [
+                '<Article: foobarbaz>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__neexregex='\W'),
+            [
+                '<Article: foobarbaz>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__neexregex='^\D+$'),
+            [
+                '<Article: Article 5>',
+                '<Article: Article 6>',
+                '<Article: Article 4>',
+                '<Article: Article 2>',
+                '<Article: Article 3>',
+                '<Article: Article 7>',
+                '<Article: Article 1>',
+            ],
+        )
+        self.assertQuerysetEqual(
+            Article.objects.filter(headline__neexregex='^\S+$'),
+            [
+                '<Article: Article 5>',
+                '<Article: Article 6>',
+                '<Article: Article 4>',
+                '<Article: Article 2>',
+                '<Article: Article 3>',
+                '<Article: Article 7>',
+                '<Article: Article 1>',
             ],
         )
