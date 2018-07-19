@@ -1038,8 +1038,8 @@ class LookupTests(DjangoLookupTests):
         self.assertQuerysetEqual(
             Article.objects.filter(headline__exiregex=r'\<bar\>'),
             [
-                '<Article: foo bar baz>',
                 '<Article: Foo Bar Baz>',
+                '<Article: foo bar baz>',
             ],
         )
 
@@ -1058,37 +1058,37 @@ class LookupTests(DjangoLookupTests):
         self.assertQuerysetEqual(
             Article.objects.filter(headline__neexregex=r'\<Bar\>'),
             [
+                '<Article: Foo Barbaz>',
+                '<Article: FooBar baz>',
                 '<Article: foo bar baz>',
                 '<Article: foo barbaz>',
                 '<Article: foobar baz>',
                 '<Article: foobarbaz>',
-                '<Article: Foo Barbaz>',
-                '<Article: FooBar baz>',
                 '<Article: Article 5>',
                 '<Article: Article 6>',
                 '<Article: Article 4>',
                 '<Article: Article 2>',
                 '<Article: Article 3>',
                 '<Article: Article 7>',
-                '<Article: Article 1>'
+                '<Article: Article 1>',
             ],
         )
         self.assertQuerysetEqual(
             Article.objects.filter(headline__neexiregex=r'\<bar\>'),
             [
+                '<Article: Foo Barbaz>',
+                '<Article: FooBar baz>',
                 '<Article: foo barbaz>',
                 '<Article: foobar baz>',
                 '<Article: foobarbaz>',
-                '<Article: Foo Barbaz>',
-                '<Article: FooBar baz>',
                 '<Article: Article 5>',
                 '<Article: Article 6>',
                 '<Article: Article 4>',
                 '<Article: Article 2>',
                 '<Article: Article 3>',
                 '<Article: Article 7>',
-                '<Article: Article 1>'
-            ],
+                '<Article: Article 1>',
+            ]
         )
 
     def test_exregex_short_end_escapes(self):
@@ -1096,7 +1096,7 @@ class LookupTests(DjangoLookupTests):
         Article.objects.create(pub_date=now, headline='foobarbaz')
 
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__exregex='\w+\s\d'),
+            Article.objects.filter(headline__exregex=r'\w+\s\d'),
             [
                 '<Article: Article 5>',
                 '<Article: Article 6>',
@@ -1108,7 +1108,7 @@ class LookupTests(DjangoLookupTests):
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__exregex='\W'),
+            Article.objects.filter(headline__exregex=r'\W'),
             [
                 '<Article: Article 5>',
                 '<Article: Article 6>',
@@ -1120,13 +1120,13 @@ class LookupTests(DjangoLookupTests):
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__exregex='^\D+$'),
+            Article.objects.filter(headline__exregex=r'^\D+$'),
             [
                 '<Article: foobarbaz>',
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__exregex='^\S+$'),
+            Article.objects.filter(headline__exregex=r'^\S+$'),
             [
                 '<Article: foobarbaz>',
             ],
@@ -1137,19 +1137,19 @@ class LookupTests(DjangoLookupTests):
         Article.objects.create(pub_date=now, headline='foobarbaz')
 
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__neexregex='\w+\s\d'),
+            Article.objects.filter(headline__neexregex=r'\w+\s\d'),
             [
                 '<Article: foobarbaz>',
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__neexregex='\W'),
+            Article.objects.filter(headline__neexregex=r'\W'),
             [
                 '<Article: foobarbaz>',
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__neexregex='^\D+$'),
+            Article.objects.filter(headline__neexregex=r'^\D+$'),
             [
                 '<Article: Article 5>',
                 '<Article: Article 6>',
@@ -1161,7 +1161,7 @@ class LookupTests(DjangoLookupTests):
             ],
         )
         self.assertQuerysetEqual(
-            Article.objects.filter(headline__neexregex='^\S+$'),
+            Article.objects.filter(headline__neexregex=r'^\S+$'),
             [
                 '<Article: Article 5>',
                 '<Article: Article 6>',
