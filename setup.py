@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """The setup script."""
 
@@ -21,6 +20,7 @@ requirements = [
 ]
 
 test_requirements = [
+    'django-environ',
     # TODO: Put package test requirements here
 ]
 
@@ -54,6 +54,6 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    test_suite='runtests.runtests',
+    test_suite='tests.runtests.runtests',
     tests_require=test_requirements,
 )

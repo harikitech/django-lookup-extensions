@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Top-level package for Django lookup extensions."""
 
 __author__ = """UNCOVER TRUTH Inc."""
