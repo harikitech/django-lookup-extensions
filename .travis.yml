@@ -16,130 +16,96 @@ matrix:
     python: 2.7
   - env: TOX_ENV=pypy-dj111 PYTHONIOENCODING=UTF-8
     python: pypy
-  - env: TOX_ENV=py34-dj111
+  - env: TOX_ENV=py34-dj111-sqlite
     python: 3.4
-  - env: TOX_ENV=py35-dj111
+  - env: TOX_ENV=py35-dj111-sqlite
     python: 3.5
-  - env: TOX_ENV=py36-dj111
+  - env: TOX_ENV=py36-dj111-sqlite
     python: 3.6
-  - env: TOX_ENV=pypy3-dj111
+  - env: TOX_ENV=pypy3-dj111-sqlite
     python: pypy3
-  - env: TOX_ENV=py34-dj20
+  - env: TOX_ENV=py34-dj20-sqlite
     python: 3.4
-  - env: TOX_ENV=py35-dj20
+  - env: TOX_ENV=py35-dj20-sqlite
     python: 3.5
-  - env: TOX_ENV=py36-dj20
+  - env: TOX_ENV=py36-dj20-sqlite
     python: 3.6
-  - env: TOX_ENV=pypy3-dj20
+  - env: TOX_ENV=pypy3-dj20-sqlite
     python: pypy3
-  - env: TOX_ENV=py35-djmaster
+  - env: TOX_ENV=py35-djmaster-sqlite
     python: 3.5
-  - env: TOX_ENV=py36-djmaster
+  - env: TOX_ENV=py36-djmaster-sqlite
     python: 3.6
 
-  - env: TOX_ENV=py27-dj111 PYTHONIOENCODING=UTF-8 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py27-dj111-postgresql PYTHONIOENCODING=UTF-8
     python: 2.7
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
-  - env: TOX_ENV=py34-dj111 PYTHONIOENCODING=UTF-8 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py34-dj111-postgresql PYTHONIOENCODING=UTF-8
     python: 3.4
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
-  - env: TOX_ENV=py35-dj111 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py35-dj111-postgresql
     python: 3.5
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
-  - env: TOX_ENV=py36-dj111 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py36-dj111-postgresql
     python: 3.6
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
-  - env: TOX_ENV=py34-dj20 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py34-dj20-postgresql
     python: 3.4
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
-  - env: TOX_ENV=py35-dj20 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py35-dj20-postgresql
     python: 3.5
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
-  - env: TOX_ENV=py36-dj20 DATABASE_URL=postgres://postgres@localhost/db
+  - env: TOX_ENV=py36-dj20-postgresql
     python: 3.6
     services:
     - postgresql
-    before_script:
-    - psql -c 'CREATE DATABASE test_db;' -U postgres
 
-  - env: TOX_ENV=py27-dj111 PYTHONIOENCODING=UTF-8 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py27-dj111-mysql PYTHONIOENCODING=UTF-8
     python: 2.7
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=pypy-dj111 PYTHONIOENCODING=UTF-8 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=pypy-dj111-mysql PYTHONIOENCODING=UTF-8
     python: pypy
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=py34-dj111 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py34-dj111-mysql
     python: 3.4
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=py35-dj111 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py35-dj111-mysql
     python: 3.5
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=py36-dj111 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py36-dj111-mysql
     python: 3.6
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=pypy3-dj111 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=pypy3-dj111-mysql
     python: pypy3
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=py34-dj20 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py34-dj20-mysql
     python: 3.4
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=py35-dj20 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py35-dj20-mysql
     python: 3.5
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=py36-dj20 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=py36-dj20-mysql
     python: 3.6
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
-  - env: TOX_ENV=pypy3-dj20 DATABASE_URL=mysql://root@localhost/db
+  - env: TOX_ENV=pypy3-dj20-mysql
     python: pypy3
     services:
     - mysql
-    before_script:
-    - mysql -e 'CREATE DATABASE test_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;' -u root
 
   - env: TOX_ENV=flake8
     python: 3.6
@@ -162,7 +128,7 @@ deploy:
   on:
     tags: true
     repo: uncovertruth/django-lookup-extensions
-    condition: "$TOX_ENV = py36-dj20"
+    condition: "$TOX_ENV = py36-dj20-sqlite"
 notifications:
   email: false
   slack:
