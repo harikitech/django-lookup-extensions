@@ -53,9 +53,22 @@ Once you have a copy of the source, you can install it with:
 Prerequisites
 -------------
 
-Add `lookup_extensions` to your `INSTALLED_APPS` setting::
+Add ``lookup_extensions`` to your ``INSTALLED_APPS`` setting::
 
     INSTALLED_APPS = [
         'lookup_extensions',
         # ...
     ]
+
+Change ``DATABASE`` 's ``ENGINE`` setting::
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'lookup_extensions.backends.postgresql',
+            # ...
+        },
+    }
+
+* For PostgreSQL/Redshift: ``lookup_extensions.backends.postgresql``
+* For MySQL: ``lookup_extensions.backends.mysql``
+* SQLite: ``lookup_extensions.backends.sqlite3``
