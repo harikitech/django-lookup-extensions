@@ -2,9 +2,17 @@
 Usage
 =====
 
-To use Django lookup extensions in a project::
+Set extended manager to your models
+-----------------------------------
 
-    import lookup_extensions
+.. code-block:: python
+
+    from lookup_extensions.manager import Manager
+
+    class Article(models.Model):
+        # ...
+
+        objects = Manager()
 
 Exists and Not exists
 ---------------------
