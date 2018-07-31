@@ -7,7 +7,6 @@ import django
 
 from .bootstrap import DJANGO_TEST_APP_PATH
 
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'test_settings')
 sys.path.append(os.path.abspath(DJANGO_TEST_APP_PATH))
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))

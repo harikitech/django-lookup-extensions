@@ -5,7 +5,10 @@ from operator import attrgetter
 from unittest import skip
 
 from django.core.exceptions import FieldError
-from django.db.models import Exists, OuterRef
+from django.db.models import (
+    Exists,
+    OuterRef,
+)
 from django.test import skipUnlessDBFeature
 
 from utils import skipIfDBVendor
