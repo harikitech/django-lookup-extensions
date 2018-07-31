@@ -10,3 +10,4 @@ class LookupExtensionsConfig(AppConfig):
 
     def ready(self):
         from . import lookups  # noqa F401
+        from . import related_lookups  # noqa F401

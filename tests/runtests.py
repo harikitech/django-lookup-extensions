@@ -2,7 +2,6 @@
 
 import os
 import sys
-import time
 
 import django
 
@@ -18,7 +17,6 @@ def runtests():
     from django.conf import settings
     from django.test.utils import get_runner
 
-    time.sleep(1)  # Wait for download completed
     django.setup()
 
     from .monkey_patch import replace_managers
