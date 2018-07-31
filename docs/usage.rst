@@ -7,7 +7,7 @@ To use Django lookup extensions in a project::
     import lookup_extensions
 
 Exists and Not exists
-=====================
+---------------------
 
 .. code-block:: python
 
