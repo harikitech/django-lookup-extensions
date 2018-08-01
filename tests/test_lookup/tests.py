@@ -5,6 +5,10 @@ from operator import attrgetter
 from unittest import skip
 
 from django.core.exceptions import FieldError
+from django.db.models import (
+    Exists,
+    OuterRef,
+)
 from django.test import skipUnlessDBFeature
 
 from utils import skipIfDBVendor
@@ -15,6 +19,7 @@ try:
         Game,
         Player,
         Season,
+        Tag,
     )
     from lookup.tests import LookupTests as DjangoLookupTests
 except ImportError:
@@ -1159,6 +1164,26 @@ class LookupTests(DjangoLookupTests):
                 '<Article: Article 2>',
                 '<Article: Article 3>',
                 '<Article: Article 7>',
+                '<Article: Article 1>',
+            ],
+        )
+
+    def test_exists(self):
+        tags = Tag.objects.filter(articles=OuterRef('id'), name='Tag 2')
+        self.assertQuerysetEqual(
+            Article.objects.filter(tag__exists=Exists(tags)).filter(author=self.au1),
+            [
+                '<Article: Article 4>',
+                '<Article: Article 3>',
+            ],
+        )
+
+    def test_neexists(self):
+        tags = Tag.objects.filter(articles=OuterRef('id'), name='Tag 2')
+        self.assertQuerysetEqual(
+            Article.objects.filter(tag__neexists=Exists(tags)).filter(author=self.au1),
+            [
+                '<Article: Article 2>',
                 '<Article: Article 1>',
             ],
         )

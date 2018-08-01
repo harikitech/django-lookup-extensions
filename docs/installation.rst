@@ -49,3 +49,13 @@ Once you have a copy of the source, you can install it with:
 
 .. _Github repo: https://github.com/uncovertruth/django-lookup-extensions
 .. _tarball: https://github.com/uncovertruth/django-lookup-extensions/tarball/master
+
+Prerequisites
+-------------
+
+Add `lookup_extensions` to your `INSTALLED_APPS` setting::
+
+    INSTALLED_APPS = [
+        'lookup_extensions',
+        # ...
+    ]

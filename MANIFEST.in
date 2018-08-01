@@ -1,15 +1,8 @@
-graft lookup_extensions
-graft docs
-graft requirements
-
-include AUTHORS.rst
-include CONTRIBUTING.rst
-include HISTORY.rst
+include *.rst
 include LICENSE
-include README.rst
+include MANIFEST.in
 include setup.cfg
 include setup.py
-include runtests.py
 include Makefile
 
 exclude .editorconfig
@@ -19,10 +12,15 @@ exclude runmakemigrations.py
 exclude tox.ini
 exclude requirements.txt
 
-global-exclude __pycache__
-global-exclude *.py[co]
-global-exclude *.cfg
+graft lookup_extensions
+graft docs
+graft requirements
+graft tests
 
 prune .github
 prune docs/_build
-prune tests
+prune vendor
+
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude *.cfg

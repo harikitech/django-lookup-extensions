@@ -2,23 +2,25 @@
 
 import os
 import sys
-import time
 
 import django
 
 from .bootstrap import DJANGO_TEST_APP_PATH
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'test_settings')
-sys.path.append(DJANGO_TEST_APP_PATH)
-sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.abspath(DJANGO_TEST_APP_PATH))
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 
 def runtests():
     from django.conf import settings
     from django.test.utils import get_runner
 
-    time.sleep(1)  # Wait for download completed
     django.setup()
+
+    from .monkey_patch import replace_managers
+
+    replace_managers()
 
     TestRunner = get_runner(settings)
     test_runner = TestRunner(
