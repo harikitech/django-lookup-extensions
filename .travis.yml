@@ -3,6 +3,7 @@ language: python
 cache:
   pip: true
   directories:
+  - $TRAVIS_BUILD_DIR/.tox
   - $TRAVIS_BUILD_DIR/vendor
 env:
   global:
