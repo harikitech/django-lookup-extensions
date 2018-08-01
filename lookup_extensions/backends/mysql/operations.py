@@ -1,6 +1,9 @@
-from django.db.backends.mysql.operations import DatabaseOperations as DjangoDatabaseOperations
+from django.db.backends.mysql.operations import \
+    DatabaseOperations as DjangoDatabaseOperations
 
-from lookup_extensions.backends.base.operations import ExtendedDatabaseOperationsMixin
+from lookup_extensions.backends.base.operations import (
+    ExtendedDatabaseOperationsMixin,
+)
 
 
 class DatabaseOperations(ExtendedDatabaseOperationsMixin, DjangoDatabaseOperations):

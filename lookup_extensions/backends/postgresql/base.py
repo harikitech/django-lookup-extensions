@@ -1,13 +1,16 @@
-from django.db.backends.postgresql.base import DatabaseWrapper as DjangoDatabaseWrapper
+from django.db.backends.postgresql.base import \
+    DatabaseWrapper as DjangoDatabaseWrapper
+
+from lookup_extensions.utils import merge_dicts
 
 from .operations import DatabaseOperations
 
 
 class ExtendedDatabaseWrapperMixin(object):
     ops_class = DatabaseOperations
-    operators = dict(
-        **DjangoDatabaseWrapper.operators,
-        **{
+    operators = merge_dicts(
+        DjangoDatabaseWrapper.operators,
+        {
             # For negates
             'neexact': '<> %s',
             'neiexact': '<> UPPER(%s)',
@@ -26,9 +29,9 @@ class ExtendedDatabaseWrapperMixin(object):
             'neexiregex': '!~* %s',
         }
     )
-    pattern_ops = dict(
-        **DjangoDatabaseWrapper.pattern_ops,
-        **{
+    pattern_ops = merge_dicts(
+        DjangoDatabaseWrapper.pattern_ops,
+        {
            'necontains': r"NOT LIKE '%%' || {} || '%%'",
            'neicontains': r"NOT LIKE '%%' || UPPER({}) || '%%'",
            'nestartswith': r"NOT LIKE {} || '%%'",
