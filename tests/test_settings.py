@@ -1,11 +1,14 @@
 import environ
 
+# Replace backends
+environ.Env.DB_SCHEMES['postgres'] = 'lookup_extensions.backends.postgresql'
+environ.Env.DB_SCHEMES['mysql'] = 'lookup_extensions.backends.mysql'
+environ.Env.DB_SCHEMES['sqlite'] = 'lookup_extensions.backends.sqlite3'
 env = environ.Env()
 
 
 SECRET_KEY = 'fake-key'
 INSTALLED_APPS = [
-    'lookup_extensions',
     'lookup',
     'or_lookups',
     'reverse_lookup',
@@ -14,7 +17,7 @@ INSTALLED_APPS = [
 DATABASES = {
     'default': env.db(default='sqlite://:memory:'),
 }
-if 'django.db.backends.mysql' == DATABASES['default']['ENGINE']:
+if 'lookup_extensions.backends.mysql' == DATABASES['default']['ENGINE']:
     """Create database with specific options for MySQL.
     https://docs.djangoproject.com/en/dev/topics/testing/overview/#the-test-database
     https://docs.djangoproject.com/en/dev/ref/databases/#creating-your-database

@@ -1,3 +1,7 @@
+# Load lookup types
+from lookup_extensions import lookups  # noqa F401
+
+
 class ExtendedDatabaseOperationsMixin(object):
     NEGATE_REGULAR_LOOKUP_TYPES = {
         'neexact': 'exact',
