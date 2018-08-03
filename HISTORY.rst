@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.0
+-----
+
+- Add support for Django 2.1
+- Add support for Python 3.7
+
 0.1.0
 -----
 
