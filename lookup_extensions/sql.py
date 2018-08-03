@@ -4,7 +4,7 @@ from django.db.models.constants import LOOKUP_SEP
 from django.db.models.sql import Query as DjangoQuery
 
 
-class ExtendedQueryMixin(object)
+class ExtendedQueryMixin(object):
     SUBQUERY_LOOKUPS = (
         'exists',
         'neexists',
