@@ -32,6 +32,8 @@ matrix:
   - env: TOX_ENV=py36-dj20-sqlite
     python: 3.6
   - env: TOX_ENV=py37-dj20-sqlite
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
   - env: TOX_ENV=pypy3-dj20-sqlite
     python: pypy3
@@ -40,6 +42,8 @@ matrix:
   - env: TOX_ENV=py36-dj21-sqlite
     python: 3.6
   - env: TOX_ENV=py37-dj21-sqlite
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
   - env: TOX_ENV=pypy3-dj21-sqlite
     python: pypy3
@@ -48,6 +52,8 @@ matrix:
   - env: TOX_ENV=py36-djmaster-sqlite
     python: 3.6
   - env: TOX_ENV=py37-djmaster-sqlite
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
 
   - env: TOX_ENV=py27-dj111-postgresql PYTHONIOENCODING=UTF-8 DATABASE_URL=postgres://postgres@localhost/db
@@ -79,6 +85,8 @@ matrix:
     services:
     - postgresql
   - env: TOX_ENV=py37-dj20-postgresql DATABASE_URL=postgres://postgres@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
     services:
     - postgresql
@@ -91,6 +99,8 @@ matrix:
     services:
     - postgresql
   - env: TOX_ENV=py37-dj21-postgresql DATABASE_URL=postgres://postgres@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
     services:
     - postgresql
@@ -132,6 +142,8 @@ matrix:
     services:
     - mysql
   - env: TOX_ENV=py37-dj20-mysql DATABASE_URL=mysql://root@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
     services:
     - mysql
@@ -148,6 +160,8 @@ matrix:
     services:
     - mysql
   - env: TOX_ENV=py37-dj21-mysql DATABASE_URL=mysql://root@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
     python: 3.7
     services:
     - mysql
@@ -157,13 +171,13 @@ matrix:
     - mysql
 
   - env: TOX_ENV=flake8
-    python: 3.7
+    python: 3.6
   - env: TOX_ENV=isort
-    python: 3.7
+    python: 3.6
   - env: TOX_ENV=readme
-    python: 3.7
+    python: 3.6
   - env: TOX_ENV=check-manifest
-    python: 3.7
+    python: 3.6
 install:
 - pip install -U pip setuptools tox wheel
 script:
