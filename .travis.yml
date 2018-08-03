@@ -31,12 +31,30 @@ matrix:
     python: 3.5
   - env: TOX_ENV=py36-dj20-sqlite
     python: 3.6
+  - env: TOX_ENV=py37-dj20-sqlite
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
   - env: TOX_ENV=pypy3-dj20-sqlite
+    python: pypy3
+  - env: TOX_ENV=py35-dj21-sqlite
+    python: 3.5
+  - env: TOX_ENV=py36-dj21-sqlite
+    python: 3.6
+  - env: TOX_ENV=py37-dj21-sqlite
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+  - env: TOX_ENV=pypy3-dj21-sqlite
     python: pypy3
   - env: TOX_ENV=py35-djmaster-sqlite
     python: 3.5
   - env: TOX_ENV=py36-djmaster-sqlite
     python: 3.6
+  - env: TOX_ENV=py37-djmaster-sqlite
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
 
   - env: TOX_ENV=py27-dj111-postgresql PYTHONIOENCODING=UTF-8 DATABASE_URL=postgres://postgres@localhost/db
     python: 2.7
@@ -64,6 +82,26 @@ matrix:
     - postgresql
   - env: TOX_ENV=py36-dj20-postgresql DATABASE_URL=postgres://postgres@localhost/db
     python: 3.6
+    services:
+    - postgresql
+  - env: TOX_ENV=py37-dj20-postgresql DATABASE_URL=postgres://postgres@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+    services:
+    - postgresql
+  - env: TOX_ENV=py35-dj21-postgresql DATABASE_URL=postgres://postgres@localhost/db
+    python: 3.5
+    services:
+    - postgresql
+  - env: TOX_ENV=py36-dj21-postgresql DATABASE_URL=postgres://postgres@localhost/db
+    python: 3.6
+    services:
+    - postgresql
+  - env: TOX_ENV=py37-dj21-postgresql DATABASE_URL=postgres://postgres@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
     services:
     - postgresql
 
@@ -103,7 +141,31 @@ matrix:
     python: 3.6
     services:
     - mysql
+  - env: TOX_ENV=py37-dj20-mysql DATABASE_URL=mysql://root@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+    services:
+    - mysql
   - env: TOX_ENV=pypy3-dj20-mysql DATABASE_URL=mysql://root@localhost/db
+    python: pypy3
+    services:
+    - mysql
+  - env: TOX_ENV=py35-dj21-mysql DATABASE_URL=mysql://root@localhost/db
+    python: 3.5
+    services:
+    - mysql
+  - env: TOX_ENV=py36-dj21-mysql DATABASE_URL=mysql://root@localhost/db
+    python: 3.6
+    services:
+    - mysql
+  - env: TOX_ENV=py37-dj21-mysql DATABASE_URL=mysql://root@localhost/db
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+    services:
+    - mysql
+  - env: TOX_ENV=pypy3-dj21-mysql DATABASE_URL=mysql://root@localhost/db
     python: pypy3
     services:
     - mysql
@@ -129,7 +191,7 @@ deploy:
   on:
     tags: true
     repo: uncovertruth/django-lookup-extensions
-    condition: "$TOX_ENV = py36-dj20-sqlite"
+    condition: "$TOX_ENV = py37-dj21-sqlite"
 notifications:
   email: false
   slack:
