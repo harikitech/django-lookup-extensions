@@ -10,7 +10,6 @@ from django.db.models import (
     OuterRef,
 )
 from django.test import skipUnlessDBFeature
-from django.test import tag
 
 from utils import skipIfDBVendor
 
