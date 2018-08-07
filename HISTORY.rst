@@ -2,16 +2,12 @@
 History
 =======
 
-0.4.0
------
-
-- Migrate to `complement` from `exists` and `neexists`
-
 0.2.0
 -----
 
 - Add support for Django 2.1
 - Add support for Python 3.7
+- Migrate to `complement` from `exists` and `neexists`
 
 0.1.0
 -----
