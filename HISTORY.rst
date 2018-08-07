@@ -2,6 +2,11 @@
 History
 =======
 
+0.4.0
+-----
+
+- Migrate to `complement` from `exists` and `neexists`
+
 0.2.0
 -----
 

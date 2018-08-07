@@ -28,6 +28,7 @@ def runtests():
         interactive=False,
         keepdb=True,
         debug_sql=True,
+        tags=['exists'],
     )
     if os.environ.get('TEST_WITH_REDSHIFT', None) == 'yes':
         test_runner.keepdb = True
