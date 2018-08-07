@@ -1169,7 +1169,6 @@ class LookupTests(DjangoLookupTests):
             ],
         )
 
-    @tag('exists')
     def test_complement(self):
         tags = Tag.objects.filter(articles=OuterRef('id'), name='Tag 2')
         self.assertQuerysetEqual(
@@ -1180,7 +1179,6 @@ class LookupTests(DjangoLookupTests):
             ],
         )
 
-    @tag('exists')
     def test_negate_complement(self):
         tags = Tag.objects.filter(articles=OuterRef('id'), name='Tag 2')
         self.assertQuerysetEqual(
