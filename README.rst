@@ -102,11 +102,10 @@ neexact is negate exact, neiexact is negate iexact, others are similar.
 - neregex
 - neiregex
 
-Exists
-^^^^^^
+Complement
+^^^^^^^^^^
 
-- exists
-- neexists
+- complement
 
 Extra regexes
 ^^^^^^^^^^^^^

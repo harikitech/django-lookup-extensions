@@ -1168,20 +1168,20 @@ class LookupTests(DjangoLookupTests):
             ],
         )
 
-    def test_exists(self):
+    def test_complement(self):
         tags = Tag.objects.filter(articles=OuterRef('id'), name='Tag 2')
         self.assertQuerysetEqual(
-            Article.objects.filter(tag__exists=Exists(tags)).filter(author=self.au1),
+            Article.objects.filter(tag__complement=Exists(tags)).filter(author=self.au1),
             [
                 '<Article: Article 4>',
                 '<Article: Article 3>',
             ],
         )
 
-    def test_neexists(self):
+    def test_negate_complement(self):
         tags = Tag.objects.filter(articles=OuterRef('id'), name='Tag 2')
         self.assertQuerysetEqual(
-            Article.objects.filter(tag__neexists=Exists(tags)).filter(author=self.au1),
+            Article.objects.filter(tag__complement=~Exists(tags)).filter(author=self.au1),
             [
                 '<Article: Article 2>',
                 '<Article: Article 1>',
