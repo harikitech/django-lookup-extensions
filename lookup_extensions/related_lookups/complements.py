@@ -1,9 +1,5 @@
-from django.db.models.fields.related_lookups import (
-    get_normalized_value,
-    MultiColSource,
-    RelatedLookupMixin,
-)
 from django.db.models.fields.related import ForeignObject
+from django.db.models.fields.related_lookups import RelatedLookupMixin
 
 from lookup_extensions.lookups import Complement
 
