@@ -2,6 +2,11 @@
 History
 =======
 
+0.2.1
+-----
+
+- Support related `complement` lookups
+
 0.2.0
 -----
 

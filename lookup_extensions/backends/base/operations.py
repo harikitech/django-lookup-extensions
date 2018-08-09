@@ -1,5 +1,8 @@
 # Load lookup types
-from lookup_extensions import lookups  # noqa F401
+from lookup_extensions import (  # noqa F401
+    lookups,
+    related_lookups,
+)
 
 
 class ExtendedDatabaseOperationsMixin(object):

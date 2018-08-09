@@ -16,6 +16,7 @@ from utils import skipIfDBVendor
 try:
     from lookup.models import (
         Article,
+        Author,
         Game,
         Player,
         Season,
@@ -1186,4 +1187,22 @@ class LookupTests(DjangoLookupTests):
                 '<Article: Article 2>',
                 '<Article: Article 1>',
             ],
+        )
+
+    def test_related_complement(self):
+        tags = Tag.objects.filter(articles__author=OuterRef('id'), name='Tag 2')
+        self.assertEqual(
+            [a.name for a in Author.objects.filter(
+                article__headline__startswith='Article',
+                article__tag__complement=Exists(tags)).distinct()],
+            ['Author 1', 'Author 2'],
+        )
+
+    def test_negate_related_complement(self):
+        tags = Tag.objects.filter(articles__author=OuterRef('id'), name='Tag 2')
+        self.assertEqual(
+            [a.name for a in Author.objects.filter(
+                article__headline__startswith='Article',
+                article__tag__complement=~Exists(tags)).distinct()],
+            [],
         )
