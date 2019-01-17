@@ -178,6 +178,11 @@ matrix:
     python: 3.6
   - env: TOX_ENV=check-manifest
     python: 3.6
+  allow_failures:
+  - env: TOX_ENV=py35-djmaster-sqlite
+  - env: TOX_ENV=py36-djmaster-sqlite
+  - env: TOX_ENV=py37-djmaster-sqlite
+
 install:
 - pip install -U pip setuptools tox wheel
 script:
