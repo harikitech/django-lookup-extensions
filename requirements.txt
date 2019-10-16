@@ -4,5 +4,5 @@ watchdog==0.9.0
 tox==3.14.0
 Sphinx==2.2.0
 twine==2.0.0
-cryptography==2.5
+cryptography==2.7
 PyYAML==3.13
