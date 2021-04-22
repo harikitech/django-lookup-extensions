@@ -5,4 +5,4 @@ tox==3.7.0
 Sphinx==1.8.3
 twine==1.12.1
 cryptography==2.5
-PyYAML==3.13
+PyYAML==5.3.1
